@@ -1,0 +1,9 @@
+services:
+# Nome da pasta que ficara no docker(pode ser qualquer nome)
+  app:
+  # Local onde está o Dockerfile
+    build: ..
+    volumes:
+      - ..:/app
+ #     - /app/node_modules
+    command: npm run dev
