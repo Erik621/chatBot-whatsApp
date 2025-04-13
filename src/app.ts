@@ -1,6 +1,6 @@
 
-import { startVenomClient } from './config/VenomConfig';
-import { MessageController } from './controllers/MessageController';
+import { startVenomClient } from './modules/WhatsappWebBot/config/VenomConfig';
+import { MessageController } from './modules/WhatsappWebBot/controllers/MessageController';
 
 const messageController = new MessageController();
 
