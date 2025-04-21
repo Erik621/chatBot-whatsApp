@@ -6,7 +6,7 @@ const app = express();
 const PORT = 3000;
 
 // Servir arquivos estáticos da pasta public
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static(path.join(__dirname, './modules/WhatsappWebBot', 'public')));
 
 // Página HTML que mostra o QR code
 app.get('/qrcode', (req, res) => {

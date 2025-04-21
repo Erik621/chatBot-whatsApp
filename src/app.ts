@@ -1,13 +1,14 @@
-
-import { startVenomClient } from './modules/WhatsappWebBot/config/VenomConfig';
+import { startWhatsappClient } from './modules/WhatsappWebBot/config/WhatsappConfig';
 import { MessageController } from './modules/WhatsappWebBot/controllers/MessageController';
 
 const messageController = new MessageController();
 
-startVenomClient().then((client) => {
-  client.onMessage(async (message) => {
+//
+
+startWhatsappClient().then((client) => {
+  client.on('message', async (message) => {
     await messageController.processMessage(client, message);
   });
 }).catch((error) => {
-  console.error('Erro ao iniciar o Venom Client:', error);
-}); 
+  console.error('Erro ao iniciar o WhatsApp Web Client:', error);
+});
