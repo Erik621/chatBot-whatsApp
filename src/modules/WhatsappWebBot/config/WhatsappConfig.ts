@@ -13,8 +13,9 @@ export const startWhatsappClient = async () => {
   const client = new Client({
     authStrategy: new LocalAuth({ clientId: 'whatsapp-session' }),
     puppeteer: {
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
       headless: true,
-      args: ['--no-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     }
   });
 

@@ -18,7 +18,12 @@
   },
   "dependencies": {
     "express": "^5.1.0",
+    "node-nlp": "^5.0.0-alpha.5",
+    "pg": "^8.14.1",
+    "puppeteer": "^24.7.2",
     "qrcode": "^1.5.4",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.22",
     "whatsapp-web.js": "^1.27.0"
   }
 }
