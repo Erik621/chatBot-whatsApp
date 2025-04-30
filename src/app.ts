@@ -16,7 +16,6 @@ startWhatsappClient().then((client) => {
   console.error('Erro ao iniciar o WhatsApp Web Client:', error);
 });
 
-dotenv.config();
 
 AppDataSource.initialize()
   .then(() => {

@@ -4,7 +4,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node src/server.ts"
+    "dev": "ts-node src/server.ts",
+    "typeorm:generate-run": "npm run typeorm:generate && npm run typeorm:run",
+    "typeorm:generate": "npx typeorm-ts-node-commonjs migration:generate db/migrations/migration --dataSource db/data-source.ts",
+    "typeorm:run": "npx typeorm-ts-node-commonjs migration:run --dataSource db/data-source.ts",
+    "typeorm:revert": "npx typeorm-ts-node-commonjs migration:revert --dataSource db/data-source.ts",
+    "typeorm:drop": "npx typeorm-ts-node-commonjs schema:drop --dataSource db/data-source.ts",
+    "db:reset": "npm run typeorm:drop && npm run typeorm:run"
   },
   "keywords": [],
   "author": "",

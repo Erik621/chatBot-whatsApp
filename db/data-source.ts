@@ -1,16 +1,22 @@
 import { DataSource } from 'typeorm';
-import {User} from './entities/User';
+import {Intent} from './entities/Intent';
+import {Example} from './entities/Example';
+import {Answer} from './entities/Answer';
+import dotenv from "dotenv";
+
+
+dotenv.config();
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: 'db', // nome do serviço no docker-compose
-  port: 5432,
-  username: 'admin',
-  password: 'admin123',
-  database: 'meubanco',
-  synchronize: true, // true para dev (gera tabelas automaticamente)
+  host: process.env.DB_HOST || "db",
+  port: parseInt(process.env.DB_PORT || "5432"),
+  username: process.env.DB_USERNAME || "admin",
+  password: process.env.DB_PASSWORD || "admin123",
+  database: process.env.DB_DATABASE || "meubanco",
+  synchronize: false, // nunca deixe true em produção
   logging: false,
-  entities: [User], // ajuste para onde estão suas entidades
-  migrations: ['../db/migrations/*.ts'],
+  entities: [Intent,Example,Answer], // ajuste para onde estão suas entidades
+  migrations: ['db/migrations/*.ts'],
   subscribers: [],
 });

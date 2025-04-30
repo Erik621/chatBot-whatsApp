@@ -1,4 +1,5 @@
 import express from 'express';
+import 'node-nlp';
 import path from 'path';
 import './app';
 
