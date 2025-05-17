@@ -1,13 +1,27 @@
 import express from 'express';
 import 'node-nlp';
 import path from 'path';
-import './app';
+import { startWhatsappClient,clearWhatsappSession } from './modules/WhatsappWebBot/config/WhatsappConfig';
+import { MessageController } from './modules/WhatsappWebBot/controllers/MessageController';
+import 'reflect-metadata';
+import { AppDataSource } from '../db/data-source';
+import dotenv from 'dotenv';
 
 const app = express();
 const PORT = 3000;
 
 // Servir arquivos estáticos da pasta public
-app.use(express.static(path.join(__dirname, './modules/WhatsappWebBot', 'public')));
+app.use('/static',express.static(path.join(__dirname, './modules/WhatsappWebBot', 'public')));
+
+app.get('/cleansession', (req, res) => {
+  const result = clearWhatsappSession();
+  if (result) {
+    res.send('✅ Sessão limpa com sucesso!');
+  } else {
+    res.send('⚠️ Nenhuma sessão para limpar ou erro ao limpar.');
+  }
+});
+
 
 // Página HTML que mostra o QR code
 app.get('/qrcode', (req, res) => {
@@ -19,7 +33,7 @@ app.get('/qrcode', (req, res) => {
       </head>
       <body style="text-align: center; margin-top: 50px;">
         <h1>Escaneie o QR Code</h1>
-        <img src="/qrcode.png" alt="QR Code do WhatsApp" width="300"/>
+        <img src="/static/qrcode.png" alt="QR Code do WhatsApp" width="300"/>
         <p>Atualize para obter um novo código</p>
       </body>
     </html>
@@ -29,3 +43,25 @@ app.get('/qrcode', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+
+
+const messageController = new MessageController();
+
+//
+
+startWhatsappClient().then((client) => {
+  client.on('message', async (message) => {
+    await messageController.processMessage(client, message);
+  });
+}).catch((error) => {
+  console.error('Erro ao iniciar o WhatsApp Web Client:', error);
+});
+dotenv.config();
+
+AppDataSource.initialize()
+  .then(() => {
+    console.log('📦 Banco conectado com sucesso!');
+    // iniciar o app
+  })
+  .catch((error) => console.error('Erro ao conectar no banco:', error));
+

@@ -6,12 +6,15 @@ services:
     container_name: whatsapp_bot
     volumes:
       - ..:/app
- #     - /app/node_modules
+ #    - ./src/modules/WhatsappWebBot/public:/app/src/modules/WhatsappWebBot/public
+ #    - /app/node_modules
     ports:
       - "3000:3000"
     restart: always
     command: npm run dev
-#    depends_on:
+   
+      
+    #    depends_on:
 #      - db
 
   db:
