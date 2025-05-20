@@ -18,6 +18,6 @@ export class Answer {
   @Column()
   text: string;
 
-  @ManyToOne(() => Intent, (intent) => intent.answers)
+  @ManyToOne(() => Intent, (Intents) => Intents.answers)
   intent: Intent;
 }

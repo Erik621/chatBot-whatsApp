@@ -2,31 +2,35 @@
 
 // @ts-ignore
 const { NlpManager } = require('node-nlp');
-
+import fs from 'fs';
+import path from 'path';
 import { NlpDataLoaderService } from './NlpDataLoaderService';
 
 export class NlpTrainingService {
   private manager: any;
   private dataLoader: NlpDataLoaderService;
+  private modelPath: string;
 
   constructor() {
     this.manager = new NlpManager({ languages: ['pt'], forceNER: true });
     this.dataLoader = new NlpDataLoaderService();
-  }
-/*   private manager: any;
+    this.modelPath = path.resolve(__dirname, '../../scripts/model.nlp');
 
-  constructor() {
-    this.manager = new NlpManager({ languages: ['pt'], forceNER: true });
-    this.manager.load('model.nlp');
-  } */
-  
+    // Carrega o modelo se já existir
+    if (fs.existsSync(this.modelPath)) {
+      this.manager.load(this.modelPath);
+      console.log(`✅ Modelo NLP carregado de: ${this.modelPath}`);
+    } else {
+      console.warn('⚠️ Modelo NLP não encontrado. Treine o modelo com "npm run train:nlp".');
+    }
+  }
 
   async processMessage(message: string): Promise<string> {
     const result = await this.manager.process('pt', message);
     return result.answer || 'Desculpe, não entendi sua mensagem.';
   }
-/* 
-  async trainAndSaveModel(modelFilePath: string): Promise<void> {
+
+  async trainAndSaveModel(): Promise<void> {
     const intentsData = await this.dataLoader.loadIntents();
 
     for (const intentData of intentsData) {
@@ -38,17 +42,15 @@ export class NlpTrainingService {
       }
     }
 
-    console.log('Treinando modelo NLP...');
+    console.log('🔧 Treinando modelo NLP...');
     await this.manager.train();
-    console.log('Modelo treinado!');
+    console.log('✅ Modelo treinado!');
 
-    this.manager.save(modelFilePath);
-    console.log(`Modelo salvo em: ${modelFilePath}`);
+    this.manager.save(this.modelPath);
+    console.log(`💾 Modelo salvo em: ${this.modelPath}`);
   }
 
   getManager(): any {
     return this.manager;
-  } */
+  }
 }
-
-

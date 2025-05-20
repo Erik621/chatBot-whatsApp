@@ -1,7 +1,9 @@
-import { MessageService } from '../services/MessageService';
-import { Message } from 'whatsapp-web.js';
+//import { MessageService } from '../services/MessageService';
+import { Message,Client } from 'whatsapp-web.js';
+import { processNlpMessage } from '../../nlpBot/controllers/nlpController';
 
-export class MessageController {
+
+/* export class MessageController {
   private messageService: MessageService;
 
   constructor() {
@@ -14,4 +16,13 @@ export class MessageController {
       await client.sendMessage(message.from, response);
     }
   }
-}
+} */
+  export const handleMessage = async (client: Client, message: Message) => {
+    const userText = message.body;
+  
+    // Processa a mensagem com NLP
+    const response = await processNlpMessage(userText);
+  
+    // Envia a resposta pelo WhatsApp
+    await client.sendMessage(message.from, response);
+  };
