@@ -1,7 +1,8 @@
 import { DataSource } from 'typeorm';
-import {Intent} from './entities/Intent';
-import {Example} from './entities/Example';
-import {Answer} from './entities/Answer';
+import {Intent} from './entities/nlpBot/Intent';
+import {Example} from './entities/nlpBot/Example';
+import {Answer} from './entities/nlpBot/Answer';
+import {User} from './entities/interface/User';
 import dotenv from "dotenv";
 
 
@@ -16,7 +17,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || "meubanco",
   synchronize: false, // nunca deixe true em produção
   logging: false,
-  entities: [Intent,Example,Answer], // ajuste para onde estão suas entidades
+  entities: [Intent,Example,Answer,User], // ajuste para onde estão suas entidades
   migrations: ['db/migrations/*.ts'],
   subscribers: [],
 });

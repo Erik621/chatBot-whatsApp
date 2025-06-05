@@ -1,7 +1,7 @@
 import { AppDataSource } from "../data-source"; // seu arquivo de conexão TypeORM
-import { Intent } from "../entities/Intent";
-import { Example } from "../entities/Example";
-import { Answer } from "../entities/Answer";
+import { Intent } from "../entities/nlpBot/Intent";
+import { Example } from "../entities/nlpBot/Example";
+import { Answer } from "../entities/nlpBot/Answer";
 
 async function seedInitialNlpData() {
     await AppDataSource.initialize();

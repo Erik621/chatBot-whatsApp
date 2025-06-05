@@ -1,7 +1,7 @@
 import { AppDataSource } from "../../../../db/data-source"
-import { Intent } from "../../../../db/entities/Intent";
-import { Example } from "../../../../db/entities/Example";
-import { Answer } from "../../../../db/entities/Answer";
+import { Intent } from "../../../../db/entities/nlpBot/Intent";
+import { Example } from "../../../../db/entities/nlpBot/Example";
+import { Answer } from "../../../../db/entities/nlpBot/Answer";
 
 interface IntentData {
   intent: string;
