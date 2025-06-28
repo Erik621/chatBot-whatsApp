@@ -18,10 +18,9 @@ services:
       # Passe aqui as variáveis necessárias para seu app se conectar ao banco,
       # por exemplo:
       DB_HOST: db
-      DB_USER: admin
+      DB_USERNAME: admin
       DB_PASSWORD: admin123
-      DB_NAME: meubanco
-
+      DB_DATABASE: meubanco
 
 
   db:
@@ -37,7 +36,23 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-volumes:
-  postgres_data:
 
-  
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    env_file: ../.env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@exemplo.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  pgadmin-data:
+  postgres_data:

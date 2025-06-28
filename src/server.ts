@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { json } from 'express';
 import 'node-nlp';
 import path from 'path';
 import { startWhatsappClient,clearWhatsappSession } from './modules/WhatsappWebBot/config/WhatsappConfig';
@@ -7,12 +7,19 @@ import 'reflect-metadata';
 import { AppDataSource } from '../db/data-source';
 import dotenv from 'dotenv';
 import userRoutes from './modules/interface/routes';
+import cors from 'cors';
 
 const app = express();
 const PORT = 3000;
 
 // Servir arquivos estáticos da pasta public
-
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+  next()
+})
+app.use(cors())
+app.use(json())
 app.use(express.json());
 app.use('/api/users', userRoutes);
 
