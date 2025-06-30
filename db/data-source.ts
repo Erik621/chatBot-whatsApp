@@ -4,6 +4,8 @@ import {Example} from './entities/nlpBot/Example';
 import {Answer} from './entities/nlpBot/Answer';
 import {User} from './entities/interface/User';
 import dotenv from "dotenv";
+import { Categoria } from './entities/interface/Categoria';
+import { Produto } from './entities/interface/Produto';
 
 
 
@@ -17,7 +19,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || "meubanco",
   synchronize: false, // nunca deixe true em produção
   logging: false,
-  entities: [Intent,Example,Answer,User], // ajuste para onde estão suas entidades
+  entities: [Intent,Example,Answer,User,Categoria,Produto], // ajuste para onde estão suas entidades
   migrations: ['db/migrations/*.ts'],
   subscribers: [],
 });

@@ -1,8 +1,11 @@
 // src/modules/users/controllers/UserController.ts
 import { Request, Response } from 'express';
-import { UserService } from '../services/InterfaceService';
+import { UserService, CategoriaService } from '../services/InterfaceService';
+
 
 const userService = new UserService();
+const service = new CategoriaService();
+
 
 export class UserController {
 
@@ -16,4 +19,49 @@ export class UserController {
   }
 
 
+}
+
+export class CategoriaController {
+  async listar(req: Request, res: Response) {
+    const categorias = await service.listarCategorias();
+    return res.json(categorias);
+  }
+
+  async criarCategoria(req: Request, res: Response) {
+    const { nome } = req.body;
+    const categoria = await service.criarCategoria(nome);
+    return res.status(201).json(categoria);
+  }
+
+  async editarCategoria(req: Request, res: Response) {
+    const id = Number(req.params.id);
+    const { nome, ativa } = req.body;
+    const categoria = await service.editarCategoria(id, nome, ativa);
+    return res.json(categoria);
+  }
+
+  async excluirCategoria(req: Request, res: Response) {
+    const id = Number(req.params.id);
+    await service.excluirCategoria(id);
+    return res.status(204).send();
+  }
+
+  async criarProduto(req: Request, res: Response) {
+    const categoriaId = Number(req.params.id);
+    const produto = await service.criarProduto(categoriaId, req.body);
+    return res.status(201).json(produto);
+  }
+
+  async editarProduto(req: Request, res: Response) {
+    const categoriaId = Number(req.params.id);
+    const produtoId = Number(req.params.produtoId);
+    const produto = await service.editarProduto(categoriaId, produtoId, req.body);
+    return res.json(produto);
+  }
+
+  async excluirProduto(req: Request, res: Response) {
+    const produtoId = Number(req.params.produtoId);
+    await service.excluirProduto(produtoId);
+    return res.status(204).send();
+  }
 }

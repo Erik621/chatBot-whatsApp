@@ -6,8 +6,9 @@ import { /* MessageController */handleMessage } from './modules/WhatsappWebBot/c
 import 'reflect-metadata';
 import { AppDataSource } from '../db/data-source';
 import dotenv from 'dotenv';
-import userRoutes from './modules/interface/routes';
+import interfaceRoutes from './modules/interface/routes';
 import cors from 'cors';
+
 
 const app = express();
 const PORT = 3000;
@@ -21,7 +22,7 @@ app.use((req, res, next) => {
 app.use(cors())
 app.use(json())
 app.use(express.json());
-app.use('/api/users', userRoutes);
+app.use('/api', interfaceRoutes);
 
 
 export default app;
