@@ -2,13 +2,10 @@
 import { Request, Response } from 'express';
 import { UserService, CategoriaService } from '../services/InterfaceService';
 
-
 const userService = new UserService();
 const service = new CategoriaService();
 
-
 export class UserController {
-
   async login(req: Request, res: Response): Promise<Response> {
     try {
       const result = await userService.login(req.body);
@@ -17,11 +14,10 @@ export class UserController {
       return res.status(401).json({ error: err.message });
     }
   }
-
-
 }
 
 export class CategoriaController {
+  // ========= CATEGORIAS =========
   async listar(req: Request, res: Response) {
     const categorias = await service.listarCategorias();
     return res.json(categorias);
@@ -46,6 +42,12 @@ export class CategoriaController {
     return res.status(204).send();
   }
 
+  // ========= PRODUTOS =========
+  async listarProduto(req: Request, res: Response) {
+    const produtos = await service.listarProdutos();
+    return res.json(produtos);
+  }
+
   async criarProduto(req: Request, res: Response) {
     const categoriaId = Number(req.params.id);
     const produto = await service.criarProduto(categoriaId, req.body);
@@ -62,6 +64,31 @@ export class CategoriaController {
   async excluirProduto(req: Request, res: Response) {
     const produtoId = Number(req.params.produtoId);
     await service.excluirProduto(produtoId);
+    return res.status(204).send();
+  }
+
+  // ========= INGREDIENTES =========
+  async criarItem(req: Request, res: Response) {
+    const produtoId = Number(req.params.produtoId);
+    const item = await service.criarIngrediente(produtoId, req.body);
+    return res.status(201).json(item);
+  }
+
+  async listarItens(req: Request, res: Response) {
+    const produtoId = Number(req.params.produtoId);
+    const itens = await service.listarIngredientesPorProduto(produtoId);
+    return res.json(itens);
+  }
+
+  async editarItem(req: Request, res: Response) {
+    const itemId = Number(req.params.itemId);
+    const item = await service.editarIngrediente(itemId, req.body);
+    return res.json(item);
+  }
+
+  async excluirItem(req: Request, res: Response) {
+    const itemId = Number(req.params.itemId);
+    await service.excluirIngrediente(itemId);
     return res.status(204).send();
   }
 }
