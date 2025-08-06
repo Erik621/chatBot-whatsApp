@@ -1,6 +1,8 @@
 // src/modules/users/controllers/UserController.ts
 import { Request, Response } from 'express';
 import { UserService, CategoriaService } from '../services/InterfaceService';
+import path from 'path';
+import fs from 'fs';
 
 const userService = new UserService();
 const service = new CategoriaService();
@@ -13,6 +15,16 @@ export class UserController {
     } catch (err: any) {
       return res.status(401).json({ error: err.message });
     }
+  }
+
+  // UPLOAD DE IMAGEM - se preferir aqui
+  async uploadImagem(req: Request & { file: Express.Multer.File }, res: Response) {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
+    }
+
+    const caminhoRelativo = `/imagens/${req.file.filename}`;
+    return res.status(200).json({ caminho: caminhoRelativo });
   }
 }
 

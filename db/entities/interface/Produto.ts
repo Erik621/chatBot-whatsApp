@@ -9,6 +9,7 @@ export class Produto {
     id: number,
     nome: string,
     imagem: string,
+    descricao: string,
     valor: number,
     categoria: Categoria,
     ingredientes: Ingrediente[]
@@ -19,6 +20,7 @@ export class Produto {
     this.valor = valor;
     this.categoria = categoria;
     this.ingredientes = ingredientes;
+    this.descricao = descricao
   }
 
   @PrimaryGeneratedColumn()
@@ -26,6 +28,9 @@ export class Produto {
 
   @Column()
   nome: string;
+
+  @Column()
+  descricao: string;
 
   @Column({ nullable: true })
   imagem: string;

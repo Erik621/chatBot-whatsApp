@@ -1,8 +1,14 @@
 // src/scripts/train-model.ts
 import { AppDataSource } from '../../../db/data-source';
 import { NlpTrainingService } from '../nlpBot/services/NlpTrainingService';
+import path from 'path';
 
 async function main() {
+  
+  
+
+const modelPath = path.resolve(__dirname, '../../scripts/model.nlp');
+  
 
   await AppDataSource.initialize();
   console.log("📦 DataSource inicializado");

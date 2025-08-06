@@ -1,0 +1,175 @@
+-- SAUDAR (id = 1)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Olá! Bem-vindo ao nosso autoatendimento! Como posso ajudar você hoje? Para fazer um pedido, clique no link abaixo 👇 https://seusite.com/pedido', 1);
+
+-- DESPEDIR (id = 2)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Até logo! Foi um prazer te atender 😊', 2);
+
+-- PERGUNTAR HORÁRIO (id = 3)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Agora são aproximadamente {{hora_atual}}.', 3);
+
+-- PERGUNTAR NOME (id = 4)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Sou seu assistente virtual, pronto para te ajudar! 🤖', 4);
+
+-- FAZER PEDIDO (id = 9)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Para fazer seu pedido, acesse o link: https://seusite.com/pedido', 9);
+
+-- VER CARDÁPIO (id = 10)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Veja nosso cardápio completo clicando aqui: https://seusite.com/cardapio', 10);
+
+-- PERGUNTAR FORMA DE PAGAMENTO (id = 11)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Aceitamos Pix, cartão de crédito/débito e dinheiro na entrega.', 11);
+
+-- PERGUNTAR TEMPO DE ENTREGA (id = 12)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Nosso tempo médio de entrega é de 30 a 45 minutos.', 12);
+
+-- CANCELAR PEDIDO (id = 13)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Seu pedido foi cancelado. Se precisar de algo, estamos à disposição.', 13);
+
+-- ACOMPANHAR PEDIDO (id = 14)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Seu pedido está em andamento. Você pode acompanhar em: https://seusite.com/acompanhar', 14);
+
+-- RECLAMAR (id = 15)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Sentimos muito pelo transtorno. Vamos verificar isso imediatamente!', 15);
+
+-- ELOGIAR (id = 16)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Agradecemos muito pelo elogio! 😊', 16);
+
+-- AGRADECER (id = 17)
+INSERT INTO answers (text, ""intentId"") VALUES
+('Disponha! Estamos aqui para te ajudar sempre que precisar.', 17);
+
+
+
+
+
+
+
+
+-- Intenção: saudar
+INSERT INTO intents (id, name) VALUES (1, 'saudar');
+INSERT INTO answers (id, text, "intentId") VALUES (
+  1,
+  'Olá! Seja muito bem-vindo ao nosso atendimento 😊 Estamos aqui para te ajudar! Caso queira fazer um pedido, é só acessar: https://meusite.com/cardapio',
+  1
+);
+
+-- Intenção: despedir
+INSERT INTO intents (id, name) VALUES (2, 'despedir');
+INSERT INTO answers (id, text, "intentId") VALUES (
+  2,
+  'Foi um prazer te atender! Esperamos você em breve para mais um pedido delicioso. Até a próxima compra! 🍽️ Acesse o cardápio aqui: https://meusite.com/cardapio',
+  2
+);
+
+-- Intenção: fazer_pedido
+INSERT INTO intents (id, name) VALUES (3, 'fazer_pedido');
+INSERT INTO answers (id, text, "intentId") VALUES (
+  3,
+  'Perfeito! Para fazer seu pedido é super simples, basta clicar no link abaixo e escolher o que deseja 😋👇\nhttps://meusite.com/cardapio',
+  3
+);
+
+-- Intenção: ver_cardapio
+INSERT INTO intents (id, name) VALUES (4, 'ver_cardapio');
+INSERT INTO answers (id, text, "intentId") VALUES (
+  4,
+  'Claro! Você pode conferir todas as nossas opções deliciosas acessando o cardápio digital no link abaixo 👇\nhttps://meusite.com/cardapio',
+  4
+);
+
+-- Intenção: perguntar_forma_pagamento
+INSERT INTO intents (id, name) VALUES (5, 'perguntar_forma_pagamento');
+INSERT INTO answers (id, text, "intentId") VALUES (
+  5,
+  'Aceitamos dinheiro, cartão (crédito e débito) e também Pix ✅ Fique à vontade para escolher a melhor forma para você! Para começar seu pedido, acesse: https://meusite.com/cardapio',
+  5
+);
+
+-- Intenção: horario_funcionamento
+INSERT INTO intents (id, name) VALUES (6, 'horario_funcionamento');
+INSERT INTO answers (id, text, "intentId") VALUES (
+  6,
+  'Nosso horário de funcionamento é de segunda a sábado, das 10h às 22h ⏰ Estamos prontos para te atender nesse período. Veja o cardápio completo aqui: https://meusite.com/cardapio',
+  6
+);
+
+
+-- Intenção: saudar
+INSERT INTO examples (text, "intentId") VALUES
+  ('Oi, tudo bem?', 1),
+  ('Olá!', 1),
+  ('Bom dia!', 1),
+  ('Boa tarde!', 1),
+  ('Boa noite!', 1),
+  ('E aí, beleza?', 1),
+  ('Oi, gostaria de fazer um pedido', 1),
+  ('Oi, vocês estão atendendo?', 1),
+  ('Oi, estão abertos?', 1),
+  ('Olá, estão funcionando hoje? 😊', 1);
+
+-- Intenção: despedir
+INSERT INTO examples (text, "intentId") VALUES
+  ('Valeu, até mais!', 2),
+  ('Obrigado, até a próxima!', 2),
+  ('Tchau!', 2),
+  ('Falou, bom trabalho!', 2),
+  ('Até a próxima compra!', 2),
+  ('Fico por aqui, obrigado', 2),
+  ('Gratidão, até breve', 2),
+  ('Encerrando por aqui, valeu!', 2);
+
+-- Intenção: fazer_pedido
+INSERT INTO examples (text, "intentId") VALUES
+  ('Quero fazer um pedido', 3),
+  ('Gostaria de pedir algo', 3),
+  ('Como faço pra pedir?', 3),
+  ('Quero pedir agora', 3),
+  ('Me passa o link do pedido', 3),
+  ('Onde eu peço?', 3),
+  ('Tem como fazer pedido agora?', 3),
+  ('Posso fazer um pedido por aqui?', 3);
+
+-- Intenção: ver_cardapio
+INSERT INTO examples (text, "intentId") VALUES
+  ('Quero ver o cardápio', 4),
+  ('Me manda o cardápio', 4),
+  ('Tem o cardápio online?', 4),
+  ('Onde vejo o cardápio?', 4),
+  ('Deixa eu ver o menu', 4),
+  ('Cardápio, por favor', 4),
+  ('Você tem o cardápio digital?', 4);
+
+-- Intenção: perguntar_forma_pagamento
+INSERT INTO examples (text, "intentId") VALUES
+  ('Quais formas de pagamento vocês aceitam?', 5),
+  ('Posso pagar com pix?', 5),
+  ('Vocês aceitam cartão?', 5),
+  ('Aceita dinheiro?', 5),
+  ('Quero saber como posso pagar', 5),
+  ('Formas de pagamento?', 5),
+  ('Aceita débito?', 5),
+  ('Tem como pagar no crédito?', 5);
+
+-- Intenção: horario_funcionamento
+INSERT INTO examples (text, "intentId") VALUES
+  ('Qual o horário de funcionamento?', 6),
+  ('Vocês abrem hoje?', 6),
+  ('Que horas estão funcionando?', 6),
+  ('Abrem aos sábados?', 6),
+  ('Funcionam à noite?', 6),
+  ('Atendem no domingo?', 6),
+  ('Estão funcionando agora?', 6),
+  ('Horário de atendimento?', 6);
+

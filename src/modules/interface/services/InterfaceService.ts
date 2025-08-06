@@ -72,9 +72,11 @@ export class CategoriaService {
     produto.nome = data.nome;
     produto.imagem = data.imagem;
     produto.valor = data.valor;
+    produto.descricao = data.descricao; // <-- aqui está o ajuste
     produto.ingredientes = data.ingredientes;
     return ProdutoRepository.save(produto);
-  }
+}
+
 
   async excluirProduto(produtoId: number): Promise<void> {
     await ProdutoRepository.delete(produtoId);

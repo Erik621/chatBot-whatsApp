@@ -37,9 +37,15 @@ async function seedInitialNlpData() {
     const exampleEntities = examples.map(e => exampleRepository.create(e));
     await exampleRepository.save(exampleEntities);
 
+/* Primeira mensagem: Olá! Bem vindo ao nosso autoatendimento!
+Segunda mensagem: Como posso ajudar você?
+Terceira mensagem: Para realizar um pedido, basta entrar no link abaixo 👇 */
+    
     // Criar Answers
     const answers = [
-        { text: 'Olá! Como posso te ajudar hoje?', intent: saudar },
+        { text: 'Olá! Bem vindo ao nosso autoatendimento!', intent: saudar },
+        { text: 'Como posso ajudar você?', intent: saudar },
+        { text: 'Para realizar um pedido, basta entrar no link abaixo 👇', intent: saudar },
         { text: 'Até logo! Volte sempre.', intent: despedir },
         { text: 'Agora são 12:00.', intent: perguntarHorario }, // depois pode fazer dinâmico
         { text: 'Eu sou seu assistente virtual!', intent: perguntarNome },

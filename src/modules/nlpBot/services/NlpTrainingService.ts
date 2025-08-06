@@ -18,17 +18,45 @@ export class NlpTrainingService {
 
     // Carrega o modelo se já existir
     if (fs.existsSync(this.modelPath)) {
-      this.manager.load(this.modelPath);
-      console.log(`✅ Modelo NLP carregado de: ${this.modelPath}`);
+      try {
+        this.manager.load(this.modelPath);
+        console.log(`✅ Modelo NLP carregado de: ${this.modelPath}`);
+      } catch (err) {
+        console.error('❌ Falha ao carregar o modelo especificado:', err);
+      }
     } else {
-      console.warn('⚠️ Modelo NLP não encontrado. Treine o modelo com "npm run train:nlp".');
+      console.warn('⚠️ Modelo NLP não encontrado no caminho esperado:', this.modelPath);
     }
+    
   }
 
-  async processMessage(message: string): Promise<string> {
-    const result = await this.manager.process('pt', message);
-    return result.answer || 'Desculpe, não entendi sua mensagem.';
+  async processMessage(message: string): Promise<string[]> {
+    try {
+      const result = await this.manager.process('pt', message);
+  
+      if (!result || !result.intent || result.intent === 'None') {
+        return [
+          'Parece que não entendi sua mensagem 🤔 Mas aqui é muito fácil fazer seu pedido! ' +
+          'Basta acessar nosso cardápio digital no link abaixo 👇\n' +
+          'https://meusite.com/cardapio'
+        ];
+      }
+  
+      const answers = result.answers || [];
+  
+      if (answers.length === 0) {
+        return ['Desculpe, ainda não tenho uma resposta para isso.'];
+      }
+  
+      // Extrai o texto da resposta (answer)
+      return answers.map((a: any) => a.answer);
+    } catch (error) {
+      console.error('❌ Erro ao processar mensagem NLP:', error);
+      return ['Ocorreu um erro ao tentar entender sua mensagem. Tente novamente mais tarde.'];
+    }
   }
+  
+  
 
   async trainAndSaveModel(): Promise<void> {
     const intentsData = await this.dataLoader.loadIntents();
@@ -43,14 +71,11 @@ export class NlpTrainingService {
     }
 
     console.log('🔧 Treinando modelo NLP...');
-    await this.manager.train();
+    await this.manager.train(this.modelPath);
     console.log('✅ Modelo treinado!');
 
     this.manager.save(this.modelPath);
     console.log(`💾 Modelo salvo em: ${this.modelPath}`);
   }
 
-  getManager(): any {
-    return this.manager;
-  }
 }
