@@ -19,12 +19,16 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalar as dependências
-RUN npm install
+RUN npm install && npm install -g ts-node
 
 # Copiar o restante do código para o container
 COPY . .
 
+# Compilar TypeScript
+RUN npm run build
+
 EXPOSE 3000
 
 # Comando para manter o container rodando e permitir execução de comandos
-CMD ["npm", "run", "dev"]
+CMD ["node","dist/server.js"]
+

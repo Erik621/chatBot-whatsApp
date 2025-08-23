@@ -1,4 +1,4 @@
-import { AppDataSource } from "../../../../db/data-source";
+/* import { AppDataSource } from "../../../../db/data-source";
 import { NlpTrainingService } from "../services/NlpTrainingService";
 
 async function trainModel() {
@@ -9,3 +9,4 @@ async function trainModel() {
 }
 
 trainModel().catch(console.error);
+ */
