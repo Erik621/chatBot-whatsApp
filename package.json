@@ -5,6 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
     "train:nlp": "ts-node src/modules/scripts/train-model.ts",
     "typeorm:generate-run": "npm run typeorm:generate && npm run typeorm:run",
     "typeorm:generate": "npx typeorm-ts-node-commonjs migration:generate db/migrations/migration --dataSource db/data-source.ts",
