@@ -19,7 +19,17 @@ export const startWhatsappClient = async () => {
     puppeteer: {
       executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process', // às vezes ajuda em Docker
+        '--disable-gpu',
+        '--user-data-dir=/tmp/chromium' // evita conflito de profile
+      ],
     }
   });
 
