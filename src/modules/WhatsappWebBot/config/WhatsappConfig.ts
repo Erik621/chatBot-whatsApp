@@ -23,13 +23,11 @@ export const startWhatsappClient = async () => {
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
+        '--disable-gpu',
+        '--disable-software-rasterizer',
         '--no-first-run',
         '--no-zygote',
-        '--disable-gpu',
-        '--single-process',              // opcional, útil em Alpine
-        '--user-data-dir=/tmp/chromium', // perfil temporário
-        '--remote-debugging-port=9222'   // força conexão estável
+        '--user-data-dir=/tmp/chromium'
       ],
     }
   });

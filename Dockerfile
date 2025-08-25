@@ -9,7 +9,9 @@ RUN apk update && apk add --no-cache \
     ca-certificates \
     ttf-freefont \
     udev \
-    bash
+    bash \
+    xvfb \
+    dumb-init
 
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
