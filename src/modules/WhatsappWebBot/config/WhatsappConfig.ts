@@ -26,9 +26,10 @@ export const startWhatsappClient = async () => {
         '--disable-accelerated-2d-canvas',
         '--no-first-run',
         '--no-zygote',
-        '--single-process', // às vezes ajuda em Docker
         '--disable-gpu',
-        '--user-data-dir=/tmp/chromium' // evita conflito de profile
+        '--single-process',              // opcional, útil em Alpine
+        '--user-data-dir=/tmp/chromium', // perfil temporário
+        '--remote-debugging-port=9222'   // força conexão estável
       ],
     }
   });

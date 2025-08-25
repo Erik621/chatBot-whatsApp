@@ -7,7 +7,9 @@ RUN apk update && apk add --no-cache \
     freetype \
     harfbuzz \
     ca-certificates \
-    ttf-freefont
+    ttf-freefont \
+    udev \
+    bash
 
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
