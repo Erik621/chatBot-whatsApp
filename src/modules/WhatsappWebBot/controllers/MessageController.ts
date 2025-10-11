@@ -26,6 +26,11 @@ export const handleMessage = async (client: Client, message: Message) => {
       return null;
     });
 
+    if (chat?.isGroup) {
+        console.log(`Mensagem ignorada de grupo: ${chat.name}`);
+        return;
+      }
+
     if (!chat) return;
 
     // Envia todas as respostas separadamente
