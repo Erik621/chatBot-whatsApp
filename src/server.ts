@@ -49,7 +49,7 @@ app.use('/api', interfaceRoutes);
 // 🖼️ Servir QR Code
 app.use('/static', express.static(path.join(__dirname, './modules/WhatsappWebBot', 'public')));
 
-app.get('/qrcode', (req, res) => {
+app.get('/api/qrcode', (req, res) => {
   res.send(`
     <html>
       <head>
@@ -66,7 +66,7 @@ app.get('/qrcode', (req, res) => {
 });
 
 // 🧹 Limpar sessão
-app.get('/cleansession', (req, res) => {
+app.get('/api/cleansession', (req, res) => {
   const result = clearWhatsappSession();
   if (result) {
     res.send('✅ Sessão limpa com sucesso!');
