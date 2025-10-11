@@ -21,7 +21,7 @@ export const AppDataSource = new DataSource({
   host: process.env.DB_HOST || "db",
   port: parseInt(process.env.DB_PORT || "5432"),
   username: process.env.DB_USERNAME || "admin",
-  password: process.env.DB_PASSWORD || "admin123",
+  password: process.env.DB_PASSWORD || "A#1N6k9Z!94oMzoqXvfd",
   database: process.env.DB_DATABASE || "meubanco",
   synchronize: false, // nunca deixe true em produção
   logging: false,
