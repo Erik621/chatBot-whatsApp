@@ -1,62 +1,3 @@
--- SAUDAR (id = 1)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Olá! Bem-vindo ao nosso autoatendimento! Como posso ajudar você hoje? Para fazer um pedido, clique no link abaixo 👇 https://seusite.com/pedido', 1);
-
--- DESPEDIR (id = 2)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Até logo! Foi um prazer te atender 😊', 2);
-
--- PERGUNTAR HORÁRIO (id = 3)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Agora são aproximadamente {{hora_atual}}.', 3);
-
--- PERGUNTAR NOME (id = 4)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Sou seu assistente virtual, pronto para te ajudar! 🤖', 4);
-
--- FAZER PEDIDO (id = 9)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Para fazer seu pedido, acesse o link: https://seusite.com/pedido', 9);
-
--- VER CARDÁPIO (id = 10)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Veja nosso cardápio completo clicando aqui: https://seusite.com/cardapio', 10);
-
--- PERGUNTAR FORMA DE PAGAMENTO (id = 11)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Aceitamos Pix, cartão de crédito/débito e dinheiro na entrega.', 11);
-
--- PERGUNTAR TEMPO DE ENTREGA (id = 12)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Nosso tempo médio de entrega é de 30 a 45 minutos.', 12);
-
--- CANCELAR PEDIDO (id = 13)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Seu pedido foi cancelado. Se precisar de algo, estamos à disposição.', 13);
-
--- ACOMPANHAR PEDIDO (id = 14)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Seu pedido está em andamento. Você pode acompanhar em: https://seusite.com/acompanhar', 14);
-
--- RECLAMAR (id = 15)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Sentimos muito pelo transtorno. Vamos verificar isso imediatamente!', 15);
-
--- ELOGIAR (id = 16)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Agradecemos muito pelo elogio! 😊', 16);
-
--- AGRADECER (id = 17)
-INSERT INTO answers (text, ""intentId"") VALUES
-('Disponha! Estamos aqui para te ajudar sempre que precisar.', 17);
-
-
-
-
-
-
-
-
 -- Intenção: saudar
 INSERT INTO intents (id, name) VALUES (1, 'saudar');
 INSERT INTO answers (id, text, "intentId") VALUES (
@@ -104,6 +45,16 @@ INSERT INTO answers (id, text, "intentId") VALUES (
   'Nosso horário de funcionamento é de segunda a sábado, das 10h às 22h ⏰ Estamos prontos para te atender nesse período. Veja o cardápio completo aqui: https://meusite.com/cardapio',
   6
 );
+
+
+
+
+
+
+
+
+
+
 
 
 -- Intenção: saudar
@@ -172,4 +123,3 @@ INSERT INTO examples (text, "intentId") VALUES
   ('Atendem no domingo?', 6),
   ('Estão funcionando agora?', 6),
   ('Horário de atendimento?', 6);
-

@@ -38,7 +38,7 @@ export class NlpTrainingService {
         return [
           'Parece que não entendi sua mensagem 🤔 Mas aqui é muito fácil fazer seu pedido! ' +
           'Basta acessar nosso cardápio digital no link abaixo 👇\n' +
-          'https://meusite.com/cardapio'
+          'https://empireofk.com.br/card'
         ];
       }
   
@@ -71,7 +71,7 @@ export class NlpTrainingService {
     }
 
     console.log('🔧 Treinando modelo NLP...');
-    await this.manager.train(this.modelPath);
+    await this.manager.train();
     console.log('✅ Modelo treinado!');
 
     this.manager.save(this.modelPath);

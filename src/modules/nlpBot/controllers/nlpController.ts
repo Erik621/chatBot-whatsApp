@@ -1,6 +1,5 @@
-import { NlpTrainingService } from '../services/NlpTrainingService';
+import nlpService from '../services/NlpSingleton';
 
-const nlpService = new NlpTrainingService();
 
 export async function processNlpMessage(text: string): Promise<string[]> {
   try {
