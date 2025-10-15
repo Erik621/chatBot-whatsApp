@@ -23,8 +23,9 @@ const server = http.createServer(app);
 // Criar servidor WebSocket
 const io = new Server(server, {
   cors: {
-    origin: "*", // depois podemos restringir para seu domínio
+    origin: "*", // pode limitar depois ao seu domínio
   },
+  path: "/api/socket.io/", // 👈 Aqui está o segredo
 });
 
 // Guardar `io` para usar em outros arquivos
