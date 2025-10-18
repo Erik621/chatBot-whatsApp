@@ -1,31 +1,38 @@
-# Usando a imagem oficial do Node.js
-FROM node:alpine
+# Usa imagem leve do Node baseada no Alpine
+FROM node:18-alpine
 
-# Instala o Google Chrome
-RUN apt-get update && apt-get install -y wget gnupg \
-    && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' \
-    && apt-get update && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
+# Instala Chromium e dependências necessárias para o whatsapp-web.js
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    nodejs \
+    yarn
 
+# Define o caminho executável do Chromium (para o Puppeteer usar)
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV PUPPETEER_SKIP_DOWNLOAD=true
 
 # Diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copiar os arquivos package.json e package-lock.json
+# Copia os arquivos de dependências
 COPY package*.json ./
 
-# Instalar as dependências
+# Instala as dependências do projeto
 RUN npm install && npm install -g ts-node
 
-# Copiar o restante do código para o container
+# Copia o restante do código
 COPY . .
 
-# Compilar TypeScript
+# Compila o TypeScript
 RUN npm run build
 
+# Expõe a porta da aplicação
 EXPOSE 3000
 
-# Comando para manter o container rodando e permitir execução de comandos
-CMD ["node","dist/server.js"]
-
+# Comando para iniciar o servidor
+CMD ["node", "dist/server.js"]

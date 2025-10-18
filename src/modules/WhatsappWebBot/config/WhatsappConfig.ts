@@ -20,7 +20,6 @@ export const startWhatsappClient = async () => {
       dataPath: './.wwebjs_auth' // 🔥 Força o uso da pasta montada
     }),
     puppeteer: {
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome',
       headless: true,
       args: [
         '--no-sandbox',
@@ -30,10 +29,10 @@ export const startWhatsappClient = async () => {
         '--disable-software-rasterizer',
         '--no-first-run',
         '--no-zygote',
-        '--user-data-dir=/root/.cache/puppeteer',
-        '--remote-debugging-port=9222'
+        '--user-data-dir=/tmp/chromium'
       ],
-    }
+    },
+
   });
 
   client.on('qr', async (qr) => {
