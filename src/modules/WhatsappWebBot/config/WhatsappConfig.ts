@@ -17,10 +17,10 @@ export const startWhatsappClient = async () => {
   const client = new Client({
     authStrategy: new LocalAuth({
       clientId: SESSION_ID,
-      dataPath: '/app/.wwebjs_auth' // 🔥 Força o uso da pasta montada
+      dataPath: './.wwebjs_auth' // 🔥 Força o uso da pasta montada
     }),
     puppeteer: {
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome',
       headless: true,
       args: [
         '--no-sandbox',
@@ -30,7 +30,8 @@ export const startWhatsappClient = async () => {
         '--disable-software-rasterizer',
         '--no-first-run',
         '--no-zygote',
-        '--user-data-dir=/tmp/chromium'
+        '--user-data-dir=/root/.cache/puppeteer',
+        '--remote-debugging-port=9222'
       ],
     }
   });
