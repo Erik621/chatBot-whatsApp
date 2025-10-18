@@ -15,7 +15,10 @@ if (!fs.existsSync(publicDir)) {
 // ✅ Função para iniciar o cliente do WhatsApp
 export const startWhatsappClient = async () => {
   const client = new Client({
-    authStrategy: new LocalAuth({ clientId: SESSION_ID }),
+    authStrategy: new LocalAuth({
+      clientId: SESSION_ID,
+      dataPath: '/app/.wwebjs_auth' // 🔥 Força o uso da pasta montada
+    }),
     puppeteer: {
       executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
       headless: true,
