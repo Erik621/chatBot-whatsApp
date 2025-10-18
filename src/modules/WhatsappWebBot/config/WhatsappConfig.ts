@@ -17,7 +17,7 @@ export const startWhatsappClient = async () => {
   const client = new Client({
     authStrategy: new LocalAuth({
       clientId: SESSION_ID,
-      dataPath: './.wwebjs_auth' // 🔥 Força o uso da pasta montada
+      dataPath: '/app/.wwebjs_auth' // 🔥 Força o uso da pasta montada
     }),
     puppeteer: {
       headless: true,
