@@ -9,6 +9,26 @@ const AUTH_PATH = '/app/.wwebjs_auth';
 const CACHE_PATH = '/app/.wwebjs_cache';
 
 
+function removeChromeLocks(baseDir: string) {
+  if (!fs.existsSync(baseDir)) return;
+  const removeRecursively = (dir: string) => {
+    for (const file of fs.readdirSync(dir)) {
+      const fullPath = path.join(dir, file);
+      if (fs.lstatSync(fullPath).isDirectory()) {
+        removeRecursively(fullPath);
+      } else if (file === 'SingletonLock' || file === 'LOCK' || file === 'SingletonCookie') {
+        try {
+          fs.rmSync(fullPath);
+          console.log('🔓 Lock antigo do Chrome removido:', fullPath);
+        } catch (err) {
+          console.warn('⚠️ Falha ao remover lock:', fullPath, err);
+        }
+      }
+    }
+  };
+  removeRecursively(baseDir);
+}
+
 // Garante as pastas
 [AUTH_PATH, CACHE_PATH].forEach((dir) => {
   if (!fs.existsSync(dir)) {
@@ -38,12 +58,13 @@ export const startWhatsappClient = async () => {
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu',
-        '--disable-software-rasterizer',
         '--no-first-run',
         '--no-zygote',
         '--single-process',
+        '--disable-extensions',
         '--disable-background-timer-throttling',
-        '--user-data-dir=/app/.wwebjs_cache'
+        '--remote-debugging-port=9222',
+        `--user-data-dir=${CACHE_PATH}/${SESSION_ID}`
       ],
     },
 
