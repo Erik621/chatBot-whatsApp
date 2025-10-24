@@ -5,7 +5,17 @@ import qrcode from 'qrcode';
 
 // ✅ Constante centralizada para o nome da sessão
 const SESSION_ID = 'whatsapp-session';
+const AUTH_PATH = '/app/.wwebjs_auth';
+const CACHE_PATH = '/app/.wwebjs_cache';
 
+
+// Garante as pastas
+[AUTH_PATH, CACHE_PATH].forEach((dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+    console.log(`📁 Pasta criada: ${dir}`);
+  }
+});
 // Cria pasta public, se não existir
 const publicDir = path.join(__dirname, '..', 'public');
 if (!fs.existsSync(publicDir)) {
@@ -14,13 +24,15 @@ if (!fs.existsSync(publicDir)) {
 
 // ✅ Função para iniciar o cliente do WhatsApp
 export const startWhatsappClient = async () => {
+  console.log('🚀 Iniciando cliente WhatsApp com Chrome nativo...');
   const client = new Client({
     authStrategy: new LocalAuth({
       clientId: SESSION_ID,
-      dataPath: '/app/.wwebjs_auth' // 🔥 Força o uso da pasta montada
+      dataPath: AUTH_PATH,
     }),
     puppeteer: {
       headless: true,
+      executablePath: '/usr/bin/google-chrome', // 🚀 usa o Chrome instalado
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -29,7 +41,9 @@ export const startWhatsappClient = async () => {
         '--disable-software-rasterizer',
         '--no-first-run',
         '--no-zygote',
-        '--user-data-dir=/tmp/chromium'
+        '--single-process',
+        '--disable-background-timer-throttling',
+        '--user-data-dir=/app/.wwebjs_cache'
       ],
     },
 
