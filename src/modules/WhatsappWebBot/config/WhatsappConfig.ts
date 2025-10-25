@@ -3,12 +3,12 @@ import fs from 'fs';
 import path from 'path';
 import qrcode from 'qrcode';
 
-// ✅ Constante centralizada para o nome da sessão
 const SESSION_ID = 'whatsapp-session';
 const AUTH_PATH = '/app/.wwebjs_auth';
 const CACHE_PATH = '/app/.wwebjs_cache';
+const CHROME_PATH = '/usr/bin/google-chrome';
 
-
+// 🔧 Remove locks antigos de perfil do Chrome
 function removeChromeLocks(baseDir: string) {
   if (!fs.existsSync(baseDir)) return;
   const removeRecursively = (dir: string) => {
@@ -16,7 +16,7 @@ function removeChromeLocks(baseDir: string) {
       const fullPath = path.join(dir, file);
       if (fs.lstatSync(fullPath).isDirectory()) {
         removeRecursively(fullPath);
-      } else if (file === 'SingletonLock' || file === 'LOCK' || file === 'SingletonCookie') {
+      } else if (['SingletonLock', 'LOCK', 'SingletonCookie'].includes(file)) {
         try {
           fs.rmSync(fullPath);
           console.log('🔓 Lock antigo do Chrome removido:', fullPath);
@@ -29,22 +29,28 @@ function removeChromeLocks(baseDir: string) {
   removeRecursively(baseDir);
 }
 
-// Garante as pastas
+// 📂 Garante as pastas
 [AUTH_PATH, CACHE_PATH].forEach((dir) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
     console.log(`📁 Pasta criada: ${dir}`);
   }
 });
-// Cria pasta public, se não existir
+
+// Cria pasta public para o QR Code
 const publicDir = path.join(__dirname, '..', 'public');
 if (!fs.existsSync(publicDir)) {
   fs.mkdirSync(publicDir, { recursive: true });
 }
 
-// ✅ Função para iniciar o cliente do WhatsApp
+// 🚀 Inicia o cliente WhatsApp com Chrome real e persistência total
 export const startWhatsappClient = async () => {
   console.log('🚀 Iniciando cliente WhatsApp com Chrome nativo...');
+
+  // 🔧 Remove locks antes de inicializar o Chrome
+  const profilePath = `${CACHE_PATH}/${SESSION_ID}`;
+  removeChromeLocks(profilePath);
+
   const client = new Client({
     authStrategy: new LocalAuth({
       clientId: SESSION_ID,
@@ -52,7 +58,7 @@ export const startWhatsappClient = async () => {
     }),
     puppeteer: {
       headless: true,
-      executablePath: '/usr/bin/google-chrome', // 🚀 usa o Chrome instalado
+      executablePath: CHROME_PATH,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -60,26 +66,25 @@ export const startWhatsappClient = async () => {
         '--disable-gpu',
         '--no-first-run',
         '--no-zygote',
-        '--single-process',
         '--disable-extensions',
         '--disable-background-timer-throttling',
         '--remote-debugging-port=9222',
-        `--user-data-dir=${CACHE_PATH}/${SESSION_ID}`
+        `--user-data-dir=${profilePath}`,
       ],
     },
-
   });
 
   client.on('qr', async (qr) => {
     const qrImagePath = path.join(publicDir, 'qrcode.png');
     await qrcode.toFile(qrImagePath, qr);
+    console.log('📸 Novo QR gerado em:', qrImagePath);
   });
 
   client.on('ready', () => {
-    console.log('🤖 Cliente WhatsApp está pronto!');
+    console.log('✅ Cliente WhatsApp conectado e pronto!');
   });
 
-  client.on('auth_failure', msg => {
+  client.on('auth_failure', (msg) => {
     console.error('❌ Falha de autenticação:', msg);
   });
 
@@ -87,28 +92,29 @@ export const startWhatsappClient = async () => {
     console.warn('⚠️ Cliente desconectado:', reason);
   });
 
-  client.initialize();
+  try {
+    await client.initialize();
+  } catch (err) {
+    console.error('❌ Erro ao iniciar o WhatsApp Web Client:', err);
+  }
+
   return client;
 };
 
-// ✅ Função para limpar sessão e cache
+// 🧹 Função opcional para limpar sessão manualmente
 export const clearWhatsappSession = (): boolean => {
   try {
-    const authPath = path.join('/app/.wwebjs_auth', SESSION_ID);
-    const cachePath = path.join('/app/.wwebjs_cache'); // ajuste conforme necessário
+    const authPath = path.join(AUTH_PATH, SESSION_ID);
+    const cachePath = path.join(CACHE_PATH, SESSION_ID);
 
     if (fs.existsSync(authPath)) {
       fs.rmSync(authPath, { recursive: true, force: true });
       console.log('🧹 Sessão do WhatsApp limpa com sucesso.');
-    } else {
-      console.log('⚠️ Nenhuma sessão encontrada.');
     }
 
     if (fs.existsSync(cachePath)) {
       fs.rmSync(cachePath, { recursive: true, force: true });
       console.log('🧹 Cache do WhatsApp limpo com sucesso.');
-    } else {
-      console.log('⚠️ Nenhum cache encontrado.');
     }
 
     return true;
