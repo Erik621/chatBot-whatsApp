@@ -6,6 +6,7 @@ import { PedidoItem } from '../../../../db/entities/interface/pedido/PedidoItem'
 import { PedidoIngrediente } from '../../../../db/entities/interface/pedido/PedidoIngrediente';
 import { Pagamento } from '../../../../db/entities/interface/pedido/Pagamento';
 import { io } from '../../../server'; // ajuste o caminho conforme seu projeto
+import { WhatsappMessageService } from '../../WhatsappWebBot/services/WhatsappMessageService';
 
 
 interface PedidoInput {
@@ -96,6 +97,14 @@ export class PedidoService {
     await this.pedidoRepo.save(pedido);
     // Emitir evento para front-end: "novoPedido"
     io.emit('novoPedido', pedido);
+
+// 📲 Enviar WhatsApp de confirmação do pedido
+await WhatsappMessageService.enviarConfirmacaoPedido(
+  novoCliente.telefone,
+  pedido.id
+);
+
+
 
     return pedido;
   }
