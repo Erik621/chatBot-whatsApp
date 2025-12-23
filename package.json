@@ -40,11 +40,11 @@
     "multer": "^2.0.1",
     "node-nlp": "^5.0.0-alpha.5",
     "pg": "^8.14.1",
-    "puppeteer": "^24.7.2",
+    "puppeteer": "^24.34.0",
     "qrcode": "^1.5.4",
     "reflect-metadata": "^0.2.2",
     "socket.io": "^4.8.1",
     "typeorm": "^0.3.22",
-    "whatsapp-web.js": "^1.31.0"
+    "whatsapp-web.js": "^1.34.2"
   }
 }
