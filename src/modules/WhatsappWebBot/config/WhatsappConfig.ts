@@ -77,7 +77,6 @@ export const startWhatsappClient = async () => {
   client.on('qr', async (qr) => {
     const qrImagePath = path.join(publicDir, 'qrcode.png');
     await qrcode.toFile(qrImagePath, qr);
-    console.log('📸 Novo QR gerado em:', qrImagePath);
   });
 
   client.on('ready', () => {

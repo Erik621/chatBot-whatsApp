@@ -21,14 +21,18 @@ export class WhatsappMessageService {
     try {
       const client = getWhatsappClient();
       const chatId = formatWhatsappNumber(telefone);
+     
 
-      const mensagem =
-        `✅ Pedido nº ${pedidoId} realizado com sucesso!\n\n` +
-        `📍 Por favor, envie sua *localização atual* para realizarmos a entrega.`;
 
-      await client.sendMessage(chatId, mensagem);
-    } catch (error) {
-      console.error('❌ Erro ao enviar mensagem de confirmação:', error);
+      await client.sendMessage(
+        chatId,
+        `✅ Pedido nº ${pedidoId} realizado com sucesso!\n\n📍 Envie sua localização para realizarmos a entrega.`
+      );
+    } catch (error: any) {
+     console.warn(
+        '⚠️ WhatsApp indisponível no momento, mensagem não enviada:',
+        error.message
+      );
     }
   }
 }
