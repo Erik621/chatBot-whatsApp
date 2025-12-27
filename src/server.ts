@@ -94,7 +94,11 @@ server.listen(PORT, '0.0.0.0', () => {
 // 🤖 Iniciar cliente do WhatsApp
 startWhatsappClient()
   .then((client) => {
-    setWhatsappClient(client);
+
+    client.on('ready', () => {
+      setWhatsappClient(client); // 👈 SÓ AQUI
+    });
+
     client.on('message', async (message) => {
       await handleMessage(client, message);
     });

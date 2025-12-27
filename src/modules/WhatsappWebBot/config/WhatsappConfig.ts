@@ -81,7 +81,6 @@ export const startWhatsappClient = async () => {
   });
 
   client.on('ready', () => {
-    setWhatsappClient(client);
     console.log('✅ Cliente WhatsApp conectado e pronto!');
   });
 
