@@ -4,17 +4,15 @@ let whatsappClient: Client | null = null;
 let whatsappReady = false;
 
 export const setWhatsappClient = (client: Client) => {
-  whatsappClient = client;
-
-  client.on('ready', () => {
-    whatsappReady = true;
-    console.log('🟢 WhatsApp marcado como READY');
-  });
+  if (!whatsappClient) {
+    whatsappClient = client;
+    whatsappReady = true; // 👈 assume ready porque só chamamos depois do ready
+  }
 };
 
 export const getWhatsappClient = (): Client => {
   if (!whatsappClient || !whatsappReady) {
-    throw new Error('⚠️ WhatsApp Client ainda não está pronto');
+    throw new Error('⚠️ WhatsApp Client indisponível');
   }
   return whatsappClient;
 };

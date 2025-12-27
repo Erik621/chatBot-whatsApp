@@ -2,6 +2,7 @@ import { Client, LocalAuth } from 'whatsapp-web.js';
 import fs from 'fs';
 import path from 'path';
 import qrcode from 'qrcode';
+import { setWhatsappClient } from '../WhatsappClientHolder';
 
 const SESSION_ID = 'whatsapp-session';
 const AUTH_PATH = '/app/.wwebjs_auth';
@@ -80,6 +81,7 @@ export const startWhatsappClient = async () => {
   });
 
   client.on('ready', () => {
+    setWhatsappClient(client);
     console.log('✅ Cliente WhatsApp conectado e pronto!');
   });
 
