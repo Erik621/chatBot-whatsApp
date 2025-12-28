@@ -102,10 +102,6 @@ const initWhatsapp = async () => {
 
   const client = await startWhatsappClient();
 
-  client.on('ready', () => {
-    console.log('🟢 WhatsApp READY (server.ts)');
-    setWhatsappClient(client);
-  });
 
   client.on('message', async (message) => {
     await handleMessage(client, message);

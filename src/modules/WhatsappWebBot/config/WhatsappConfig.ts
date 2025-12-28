@@ -44,15 +44,21 @@ if (!fs.existsSync(publicDir)) {
   fs.mkdirSync(publicDir, { recursive: true });
 }
 
+let client: Client | null = null;
+
 // 🚀 Inicia o cliente WhatsApp com Chrome real e persistência total
 export const startWhatsappClient = async () => {
+    if (client) {
+    console.log('⚠️ WhatsApp Client já existe, reutilizando');
+    return client;
+  }
   console.log('🚀 Iniciando cliente WhatsApp com Chrome nativo...');
 
   // 🔧 Remove locks antes de inicializar o Chrome
   const profilePath = `${CACHE_PATH}/${SESSION_ID}`;
   removeChromeLocks(profilePath);
 
-  const client = new Client({
+  client = new Client({
     authStrategy: new LocalAuth({
       clientId: SESSION_ID,
       dataPath: AUTH_PATH,
@@ -79,7 +85,11 @@ export const startWhatsappClient = async () => {
     const qrImagePath = path.join(publicDir, 'qrcode.png');
     await qrcode.toFile(qrImagePath, qr);
   });
-
+  
+  client.on('ready', () => {
+    console.log('✅ WhatsApp READY (config)');
+    setWhatsappClient(client!);
+  });
 
   client.on('auth_failure', (msg) => {
     console.error('❌ Falha de autenticação:', msg);
