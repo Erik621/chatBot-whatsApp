@@ -80,9 +80,6 @@ export const startWhatsappClient = async () => {
     await qrcode.toFile(qrImagePath, qr);
   });
 
-  client.on('ready', () => {
-    console.log('✅ Cliente WhatsApp conectado e pronto!');
-  });
 
   client.on('auth_failure', (msg) => {
     console.error('❌ Falha de autenticação:', msg);

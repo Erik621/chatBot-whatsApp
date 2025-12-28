@@ -4,12 +4,14 @@ let whatsappClient: Client | null = null;
 let whatsappReady = false;
 
 export const setWhatsappClient = (client: Client) => {
-  if (!whatsappClient) {
-    whatsappClient = client;
-    whatsappReady = true; // 👈 assume ready porque só chamamos depois do ready
+  if (whatsappClient) {
+    console.warn('⚠️ WhatsApp Client já definido, ignorando novo set');
+    return;
   }
-};
 
+  whatsappClient = client;
+  whatsappReady = true;
+};
 export const getWhatsappClient = (): Client => {
   if (!whatsappClient || !whatsappReady) {
     throw new Error('⚠️ WhatsApp Client indisponível');

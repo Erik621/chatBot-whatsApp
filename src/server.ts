@@ -77,36 +77,6 @@ app.get('/api/cleansession', (req, res) => {
   }
 });
 
-// Conexão do socket
-io.on('connection', (socket) => {
-  console.log('📡 Cliente conectado ao WebSocket');
-
-  socket.on('disconnect', () => {
-    console.log('❌ Cliente desconectado WebSocket');
-  });
-});
-
-// 🚀 Iniciar servidor HTTP com WebSocket
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor rodando em http://0.0.0.0:${PORT}`);
-});
-
-// 🤖 Iniciar cliente do WhatsApp
-startWhatsappClient()
-  .then((client) => {
-
-    client.on('ready', () => {
-      setWhatsappClient(client); // 👈 SÓ AQUI
-    });
-
-    client.on('message', async (message) => {
-      await handleMessage(client, message);
-    });
-  })
-  .catch((error) => {
-    console.error('❌ Erro ao iniciar o WhatsApp Web Client:', error);
-  });
-
 // 🗄️ Iniciar conexão com o banco
 AppDataSource.initialize()
   .then(() => {
@@ -115,6 +85,43 @@ AppDataSource.initialize()
   .catch((error) => {
     console.error('❌ Erro ao conectar no banco:', error);
   });
+
+
+
+
+// 🤖 Iniciar cliente do WhatsApp
+let whatsappStarted = false;
+
+const initWhatsapp = async () => {
+  if (whatsappStarted) {
+    console.log('⚠️ WhatsApp já inicializado, ignorando...');
+    return;
+  }
+
+  whatsappStarted = true;
+
+  const client = await startWhatsappClient();
+
+  client.on('ready', () => {
+    console.log('🟢 WhatsApp READY (server.ts)');
+    setWhatsappClient(client);
+  });
+
+  client.on('message', async (message) => {
+    await handleMessage(client, message);
+  });
+};
+
+initWhatsapp()
+  .catch((error) => {
+    console.error('❌ Erro ao iniciar o WhatsApp Web Client:', error);
+  });
+
+  // 🚀 Iniciar servidor HTTP com WebSocket
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Servidor rodando em http://0.0.0.0:${PORT}`);
+});
+
 
 // Evento de conexão WebSocket
 io.on('connection', (socket) => {
