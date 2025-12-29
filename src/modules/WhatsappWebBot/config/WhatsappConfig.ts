@@ -52,7 +52,7 @@ export const startWhatsappClient = async () => {
     console.log('⚠️ WhatsApp Client já existe, reutilizando');
     return client;
   }
-  console.log('🚀 Iniciando cliente WhatsApp com Chrome nativo...');
+ console.log('🚀 Criando instância ÚNICA do WhatsApp Client');
 
   // 🔧 Remove locks antes de inicializar o Chrome
   const profilePath = `${CACHE_PATH}/${SESSION_ID}`;

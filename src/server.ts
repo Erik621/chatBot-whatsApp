@@ -89,23 +89,12 @@ AppDataSource.initialize()
 
 
 
-// 🤖 Iniciar cliente do WhatsApp
-let whatsappStarted = false;
+
 
 const initWhatsapp = async () => {
-  if (whatsappStarted) {
-    console.log('⚠️ WhatsApp já inicializado, ignorando...');
-    return;
-  }
-
-  whatsappStarted = true;
-
-  const client = await startWhatsappClient();
 
 
-  client.on('message', async (message) => {
-    await handleMessage(client, message);
-  });
+  await startWhatsappClient();
 };
 
 initWhatsapp()
