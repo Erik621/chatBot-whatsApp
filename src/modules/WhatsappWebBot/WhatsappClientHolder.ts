@@ -1,4 +1,4 @@
-import { Client } from 'whatsapp-web.js';
+/* import { Client } from 'whatsapp-web.js';
 
 let whatsappClient: Client | null = null;
 let whatsappReady = false;
@@ -18,3 +18,4 @@ export const getWhatsappClient = (): Client => {
   }
   return whatsappClient;
 };
+ */

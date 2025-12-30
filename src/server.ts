@@ -11,7 +11,7 @@ import { startWhatsappClient, clearWhatsappSession } from './modules/WhatsappWeb
 import { handleMessage } from './modules/WhatsappWebBot/controllers/MessageController';
 import interfaceRoutes from './modules/interface/routes';
 import { AppDataSource } from '../db/data-source';
-import { setWhatsappClient } from './modules/WhatsappWebBot/WhatsappClientHolder';
+//import { setWhatsappClient } from './modules/WhatsappWebBot/WhatsappClientHolder';
 
 dotenv.config();
 

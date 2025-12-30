@@ -76,7 +76,7 @@ export const startWhatsappClient = async () => {
         '--disable-extensions',
         '--disable-background-timer-throttling',
         '--remote-debugging-port=9222',
-        `--user-data-dir=${profilePath}`,
+        /* `--user-data-dir=${profilePath}`, */
       ],
     },
   });
