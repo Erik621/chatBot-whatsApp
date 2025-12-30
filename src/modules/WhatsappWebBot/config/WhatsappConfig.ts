@@ -2,7 +2,6 @@ import { Client, LocalAuth } from 'whatsapp-web.js';
 import fs from 'fs';
 import path from 'path';
 import qrcode from 'qrcode';
-import { setWhatsappClient } from '../WhatsappClientHolder';
 
 const SESSION_ID = 'whatsapp-session';
 const AUTH_PATH = '/app/.wwebjs_auth';
@@ -44,21 +43,15 @@ if (!fs.existsSync(publicDir)) {
   fs.mkdirSync(publicDir, { recursive: true });
 }
 
-let client: Client | null = null;
-
 // 🚀 Inicia o cliente WhatsApp com Chrome real e persistência total
 export const startWhatsappClient = async () => {
-    if (client) {
-    console.log('⚠️ WhatsApp Client já existe, reutilizando');
-    return client;
-  }
- console.log('🚀 Criando instância ÚNICA do WhatsApp Client');
+  console.log('🚀 Iniciando cliente WhatsApp com Chrome nativo...');
 
   // 🔧 Remove locks antes de inicializar o Chrome
   const profilePath = `${CACHE_PATH}/${SESSION_ID}`;
   removeChromeLocks(profilePath);
 
-  client = new Client({
+  const client = new Client({
     authStrategy: new LocalAuth({
       clientId: SESSION_ID,
       dataPath: AUTH_PATH,
@@ -76,7 +69,7 @@ export const startWhatsappClient = async () => {
         '--disable-extensions',
         '--disable-background-timer-throttling',
         '--remote-debugging-port=9222',
-        /* `--user-data-dir=${profilePath}`, */
+        `--user-data-dir=${profilePath}`,
       ],
     },
   });
@@ -85,10 +78,9 @@ export const startWhatsappClient = async () => {
     const qrImagePath = path.join(publicDir, 'qrcode.png');
     await qrcode.toFile(qrImagePath, qr);
   });
-  
+
   client.on('ready', () => {
-    console.log('✅ WhatsApp READY (config)');
-    setWhatsappClient(client!);
+    console.log('✅ Cliente WhatsApp conectado e pronto!');
   });
 
   client.on('auth_failure', (msg) => {

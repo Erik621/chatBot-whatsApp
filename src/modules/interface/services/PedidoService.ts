@@ -6,7 +6,8 @@ import { PedidoItem } from '../../../../db/entities/interface/pedido/PedidoItem'
 import { PedidoIngrediente } from '../../../../db/entities/interface/pedido/PedidoIngrediente';
 import { Pagamento } from '../../../../db/entities/interface/pedido/Pagamento';
 import { io } from '../../../server'; // ajuste o caminho conforme seu projeto
-import { WhatsappMessageService } from '../../WhatsappWebBot/services/WhatsappMessageService';
+import { sendMessage } from '../../WhatsappWebBot/services/WhatsappService';
+
 
 
 interface PedidoInput {
@@ -98,14 +99,6 @@ export class PedidoService {
     // Emitir evento para front-end: "novoPedido"
     io.emit('novoPedido', pedido);
 
-// 📲 Enviar WhatsApp de confirmação do pedido
-await WhatsappMessageService.enviarConfirmacaoPedido(
-  novoCliente.telefone,
-  pedido.id
-);
-
-
-
     return pedido;
   }
 
@@ -134,10 +127,25 @@ await WhatsappMessageService.enviarConfirmacaoPedido(
   }
 
   async finalizarPedido(pedidoId: number): Promise<Pedido> {
-    const pedido = await this.pedidoRepo.findOneOrFail({ where: { id: pedidoId } });
+    const pedido = await this.pedidoRepo.findOneOrFail({
+      where: { id: pedidoId },
+      relations: ['cliente'],
+    });
     pedido.finalizado = true;
     pedido.finalizadoEm = new Date();
-    return await this.pedidoRepo.save(pedido);
+    await this.pedidoRepo.save(pedido);
+
+    const telefone = pedido.cliente.telefone.replace(/\D/g, '');
+    const mensagem = `
+✅ Pedido nº ${pedido.id} realizado com sucesso!
+
+📍 Para seguirmos com a entrega, por favor envie sua localização atual aqui no WhatsApp.
+`.trim();
+
+    await sendMessage(telefone, mensagem);
+
+    return pedido;
+
   }
 
 }

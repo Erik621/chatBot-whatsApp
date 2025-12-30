@@ -11,7 +11,8 @@ import { startWhatsappClient, clearWhatsappSession } from './modules/WhatsappWeb
 import { handleMessage } from './modules/WhatsappWebBot/controllers/MessageController';
 import interfaceRoutes from './modules/interface/routes';
 import { AppDataSource } from '../db/data-source';
-//import { setWhatsappClient } from './modules/WhatsappWebBot/WhatsappClientHolder';
+
+//import { setWhatsappClient } from './modules/WhatsappWebBot/services/WhatsappService';
 
 dotenv.config();
 
@@ -77,6 +78,34 @@ app.get('/api/cleansession', (req, res) => {
   }
 });
 
+// Conexão do socket
+io.on('connection', (socket) => {
+  console.log('📡 Cliente conectado ao WebSocket');
+
+  socket.on('disconnect', () => {
+    console.log('❌ Cliente desconectado WebSocket');
+  });
+});
+
+// 🚀 Iniciar servidor HTTP com WebSocket
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Servidor rodando em http://0.0.0.0:${PORT}`);
+});
+
+// 🤖 Iniciar cliente do WhatsApp
+startWhatsappClient()
+  .then((client) => {
+    
+  
+
+    client.on('message', async (message) => {
+      await handleMessage(client, message);
+    });
+  })
+  .catch((error) => {
+    console.error('❌ Erro ao iniciar o WhatsApp Web Client:', error);
+  });
+
 // 🗄️ Iniciar conexão com o banco
 AppDataSource.initialize()
   .then(() => {
@@ -85,28 +114,6 @@ AppDataSource.initialize()
   .catch((error) => {
     console.error('❌ Erro ao conectar no banco:', error);
   });
-
-
-
-
-
-
-const initWhatsapp = async () => {
-
-
-  await startWhatsappClient();
-};
-
-initWhatsapp()
-  .catch((error) => {
-    console.error('❌ Erro ao iniciar o WhatsApp Web Client:', error);
-  });
-
-  // 🚀 Iniciar servidor HTTP com WebSocket
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor rodando em http://0.0.0.0:${PORT}`);
-});
-
 
 // Evento de conexão WebSocket
 io.on('connection', (socket) => {

@@ -9,6 +9,24 @@ export const handleMessage = async (client: Client, message: Message) => {
       return;
     }
 
+        // 📍 TRATAMENTO DE LOCALIZAÇÃO (ANTES DO NLP)
+    if (message.type === 'location') {
+      const chat = await message.getChat().catch(() => null);
+
+      if (chat?.isGroup) return;
+
+      await message.reply(
+        '🙏 Obrigado! Recebemos sua localização.\nAguarde, seu pedido já está em preparo 🚀'
+      );
+
+      return; // ⛔ IMPORTANTE: NÃO passa pelo NLP
+    }
+
+       // 🧹 Ignorar mensagens sem texto (áudio, imagem, etc.)
+    if (!message.body || message.body.trim() === '') {
+      return;
+    }
+
     const userText = message.body;
 
     // Processa a mensagem com NLP
