@@ -1,11 +1,11 @@
-import express, { json } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import 'reflect-metadata';
 import dotenv from 'dotenv';
 import path from 'path';
 import cors from 'cors';
 import 'node-nlp';
-import http from 'http'; // ⬅️ IMPORTANTE para criar o servidor HTTP
-import { Server } from 'socket.io'; // ⬅️ Socket.IO
+import http from 'http';
+import { Server } from 'socket.io';
 
 import { startWhatsappClient, clearWhatsappSession } from './modules/WhatsappWebBot/config/WhatsappConfig';
 import { handleMessage } from './modules/WhatsappWebBot/controllers/MessageController';
@@ -14,6 +14,7 @@ import { AppDataSource } from '../db/data-source';
 
 import { setWhatsappClient } from './modules/WhatsappWebBot/services/WhatsappService';
 import { WhatsappContatoRepository } from './modules/interface/repositories/InterfaceRepository';
+
 
 dotenv.config();
 
@@ -35,13 +36,12 @@ const io = new Server(server, {
 export { io };
 
 // 🛡️ Middleware CORS e headers
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-  next()
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  next();
 });
 app.use(cors());
-app.use(json());
 app.use(express.json());
 
 // 📂 Servir arquivos de imagem
@@ -53,7 +53,7 @@ app.use('/api', interfaceRoutes);
 // 🖼️ Servir QR Code
 app.use('/static', express.static(path.join(__dirname, './modules/WhatsappWebBot', 'public')));
 
-app.get('/api/qrcode', (req, res) => {
+app.get('/api/qrcode', (req: Request, res: Response) => {
   res.send(`
     <html>
       <head>
@@ -70,7 +70,7 @@ app.get('/api/qrcode', (req, res) => {
 });
 
 // 🧹 Limpar sessão
-app.get('/api/cleansession', (req, res) => {
+app.get('/api/cleansession', (req: Request, res: Response) => {
   const result = clearWhatsappSession();
   if (result) {
     res.send('✅ Sessão limpa com sucesso!');
