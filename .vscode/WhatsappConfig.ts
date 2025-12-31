@@ -1,4 +1,4 @@
-import { Client, LocalAuth } from 'whatsapp-web.js';
+/* import { Client, LocalAuth } from 'whatsapp-web.js';
 import fs from 'fs';
 import path from 'path';
 import qrcode from 'qrcode';
@@ -129,3 +129,4 @@ export const clearWhatsappSession = (): boolean => {
     return false;
   }
 };
+ */
