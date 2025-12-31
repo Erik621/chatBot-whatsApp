@@ -10,6 +10,7 @@ import { User } from '../../../../db/entities/interface/User';
 import { Categoria } from '../../../../db/entities/interface/Categoria';
 import { Produto } from '../../../../db/entities/interface/Produto';
 import { Ingrediente } from '../../../../db/entities/interface/Ingrediente';
+import { WhatsappContato } from '../../../../db/entities/interface/WhatsappContato';
 
 export const UserRepository = AppDataSource.getRepository(User);
 export const CategoriaRepository = AppDataSource.getRepository(Categoria);
@@ -22,3 +23,4 @@ export const PedidoRepository = AppDataSource.getRepository(Pedido);
 export const PedidoItemRepository = AppDataSource.getRepository(PedidoItem);
 export const PedidoIngredienteRepository = AppDataSource.getRepository(PedidoIngrediente);
 export const PagamentoRepository = AppDataSource.getRepository(Pagamento);
+export const WhatsappContatoRepository = AppDataSource.getRepository(WhatsappContato);

@@ -12,7 +12,8 @@ import { handleMessage } from './modules/WhatsappWebBot/controllers/MessageContr
 import interfaceRoutes from './modules/interface/routes';
 import { AppDataSource } from '../db/data-source';
 
-//import { setWhatsappClient } from './modules/WhatsappWebBot/services/WhatsappService';
+import { setWhatsappClient } from './modules/WhatsappWebBot/services/WhatsappService';
+import { WhatsappContatoRepository } from './modules/interface/repositories/InterfaceRepository';
 
 dotenv.config();
 
@@ -78,14 +79,6 @@ app.get('/api/cleansession', (req, res) => {
   }
 });
 
-// Conexão do socket
-io.on('connection', (socket) => {
-  console.log('📡 Cliente conectado ao WebSocket');
-
-  socket.on('disconnect', () => {
-    console.log('❌ Cliente desconectado WebSocket');
-  });
-});
 
 // 🚀 Iniciar servidor HTTP com WebSocket
 server.listen(PORT, '0.0.0.0', () => {
@@ -95,12 +88,47 @@ server.listen(PORT, '0.0.0.0', () => {
 // 🤖 Iniciar cliente do WhatsApp
 startWhatsappClient()
   .then((client) => {
-    
-  
+
+    setWhatsappClient(client);
 
     client.on('message', async (message) => {
-      await handleMessage(client, message);
-    });
+      try {
+        // Ignorar status e grupos
+        if (message.from === 'status@broadcast') return;
+        if (!message.from.endsWith('@c.us')) return;
+
+        const whatsappId = message.from;
+
+        const telefone = whatsappId
+          .replace('@c.us', '')
+          .replace(/^55/, '');
+        // 🔹 Salva ou atualiza contato
+        const contatoExistente = await WhatsappContatoRepository.findOne({
+          where: { whatsappId }
+        });
+
+        if (contatoExistente) {
+          contatoExistente.ultimaInteracao = new Date();
+          await WhatsappContatoRepository.save(contatoExistente);
+        } else {
+          const novoContato = WhatsappContatoRepository.create({
+            whatsappId,
+            telefone,
+            ultimaInteracao: new Date()
+          });
+
+          await WhatsappContatoRepository.save(novoContato);
+          console.log('📇 Novo contato WhatsApp salvo:', whatsappId);
+        }
+
+        // 🔹 Continua o fluxo normal do bot (NLP etc)
+        await handleMessage(client, message);
+      } catch (err) {
+        console.error('❌ Erro ao processar mensagem WhatsApp:', err);
+      }
+
+    }
+    );
   })
   .catch((error) => {
     console.error('❌ Erro ao iniciar o WhatsApp Web Client:', error);

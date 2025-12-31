@@ -12,6 +12,7 @@ import { Pagamento } from './entities/interface/pedido/Pagamento';
 import { Pedido } from './entities/interface/pedido/Pedido';
 import { PedidoIngrediente } from './entities/interface/pedido/PedidoIngrediente';
 import { PedidoItem } from './entities/interface/pedido/PedidoItem';
+import { WhatsappContato } from './entities/interface/WhatsappContato';
 
 
 
@@ -25,7 +26,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || "meubanco",
   synchronize: false, // nunca deixe true em produção
   logging: false,
-  entities: [Intent,Example,Answer,User,Categoria,Produto,Ingrediente,Cliente,Pagamento,Pedido,PedidoIngrediente,PedidoItem], // ajuste para onde estão suas entidades
+  entities: [Intent,Example,Answer,User,Categoria,Produto,Ingrediente,Cliente,Pagamento,Pedido,PedidoIngrediente,PedidoItem,WhatsappContato], // ajuste para onde estão suas entidades
   migrations: ['db/migrations/*.ts'],
   subscribers: [],
 });

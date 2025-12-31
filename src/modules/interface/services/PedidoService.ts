@@ -7,8 +7,19 @@ import { PedidoIngrediente } from '../../../../db/entities/interface/pedido/Pedi
 import { Pagamento } from '../../../../db/entities/interface/pedido/Pagamento';
 import { io } from '../../../server'; // ajuste o caminho conforme seu projeto
 import { sendMessage } from '../../WhatsappWebBot/services/WhatsappService';
+import { WhatsappContatoRepository } from '../repositories/InterfaceRepository';
+import { gerarPossiveisTelefones } from '../utils/telefone';
 
+function formatarTelefone(telefone: string): string {
+  const numero = telefone.replace(/\D/g, '');
 
+  // Garante código do Brasil
+  if (!numero.startsWith('55')) {
+    return `55${numero}@c.us`;
+  }
+
+  return `${numero}@c.us`;
+}
 
 interface PedidoInput {
   cliente: {
@@ -99,7 +110,32 @@ export class PedidoService {
     // Emitir evento para front-end: "novoPedido"
     io.emit('novoPedido', pedido);
 
+
+    const telefonesPossiveis = gerarPossiveisTelefones(
+      data.cliente.telefone,
+      '77'
+    );
+
+    const contato = await WhatsappContatoRepository.findOne({
+      where: telefonesPossiveis.map(tel => ({ telefone: tel }))
+    });
+
+    try {
+      if (contato) {
+        console.log('📨 Enviando mensagem WhatsApp:', contato.whatsappId);
+
+        await sendMessage(contato.whatsappId,
+          `✅ Pedido nº ${pedido.id} realizado com sucesso!\n\n📍 Para seguirmos com a entrega, por favor envie sua localização atual aqui no WhatsApp.`
+        );
+      } else {
+        console.log('⚠️ Cliente ainda não falou com o WhatsApp');
+      }
+
+    } catch (err) {
+      console.error('❌ Falha ao enviar WhatsApp:', err);
+    }
     return pedido;
+
   }
 
   /*   async listarPedidos(): Promise<Pedido[]> {
@@ -126,26 +162,12 @@ export class PedidoService {
     return pedido;
   }
 
+
   async finalizarPedido(pedidoId: number): Promise<Pedido> {
-    const pedido = await this.pedidoRepo.findOneOrFail({
-      where: { id: pedidoId },
-      relations: ['cliente'],
-    });
+    const pedido = await this.pedidoRepo.findOneOrFail({ where: { id: pedidoId } });
     pedido.finalizado = true;
     pedido.finalizadoEm = new Date();
-    await this.pedidoRepo.save(pedido);
-
-    const telefone = pedido.cliente.telefone.replace(/\D/g, '');
-    const mensagem = `
-✅ Pedido nº ${pedido.id} realizado com sucesso!
-
-📍 Para seguirmos com a entrega, por favor envie sua localização atual aqui no WhatsApp.
-`.trim();
-
-    await sendMessage(telefone, mensagem);
-
-    return pedido;
-
+    return await this.pedidoRepo.save(pedido);
   }
 
 }
