@@ -9,7 +9,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { Cliente } from './Cliente';
-import { PedidoItem } from '../pedido/PedidoItem';
+import { PedidoItem } from './PedidoItem';
 import { Pagamento } from './Pagamento';
 
 @Entity()

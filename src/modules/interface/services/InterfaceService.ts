@@ -6,12 +6,12 @@ import {
   IngredienteRepository,
 } from '../repositories/InterfaceRepository';
 import { CreateUserDTO } from '../dtos/CreateInterfaceDTO';
-import { User } from '../../../../db/entities/interface/User';
+import { User } from '../../../db/entities/interface/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Categoria } from '../../../../db/entities/interface/Categoria';
-import { Produto } from '../../../../db/entities/interface/Produto';
-import { Ingrediente } from '../../../../db/entities/interface/Ingrediente';
+import { Categoria } from '../../../db/entities/interface/Categoria';
+import { Produto } from '../../../db/entities/interface/Produto';
+import { Ingrediente } from '../../../db/entities/interface/Ingrediente';
 
 export class UserService {
   async login(data: CreateUserDTO): Promise<{ token: string }> {

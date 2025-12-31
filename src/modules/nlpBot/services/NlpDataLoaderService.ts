@@ -1,6 +1,6 @@
 //src/modules/nlpBot/services/NlpDataLoaderService.ts
-import { AppDataSource } from "../../../../db/data-source";
-import { Intent } from "../../../../db/entities/nlpBot/Intent";
+import { AppDataSource } from "../../../db/data-source";
+import { Intent } from "../../../db/entities/nlpBot/Intent";
 
 interface IntentData {
   intent: string;

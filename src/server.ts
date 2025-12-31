@@ -10,7 +10,7 @@ import { Server } from 'socket.io';
 import { startWhatsappClient, clearWhatsappSession } from './modules/WhatsappWebBot/config/WhatsappConfig';
 import { handleMessage } from './modules/WhatsappWebBot/controllers/MessageController';
 import interfaceRoutes from './modules/interface/routes';
-import { AppDataSource } from '../db/data-source';
+import { AppDataSource } from './db/data-source';
 
 import { setWhatsappClient } from './modules/WhatsappWebBot/services/WhatsappService';
 import { WhatsappContatoRepository } from './modules/interface/repositories/InterfaceRepository';

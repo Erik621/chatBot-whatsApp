@@ -1,5 +1,5 @@
 // src/scripts/train-model.ts
-import { AppDataSource } from '../../../db/data-source';
+import { AppDataSource } from '../../db/data-source';
 import { NlpTrainingService } from '../nlpBot/services/NlpTrainingService';
 import path from 'path';
 

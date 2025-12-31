@@ -1,4 +1,4 @@
-import { AppDataSource } from "../../../../db/data-source";
+import { AppDataSource } from "../../../db/data-source";
 import { NlpDataLoaderService } from "../services/NlpDataLoaderService";
 
 async function testLoadIntents() {

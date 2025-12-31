@@ -1,10 +1,10 @@
 // src/modules/users/services/PedidoService.ts
-import { AppDataSource } from '../../../../db/data-source';
-import { Cliente } from '../../../../db/entities/interface/pedido/Cliente';
-import { Pedido } from '../../../../db/entities/interface/pedido/Pedido';
-import { PedidoItem } from '../../../../db/entities/interface/pedido/PedidoItem';
-import { PedidoIngrediente } from '../../../../db/entities/interface/pedido/PedidoIngrediente';
-import { Pagamento } from '../../../../db/entities/interface/pedido/Pagamento';
+import { AppDataSource } from '../../../db/data-source';
+import { Cliente } from '../../../db/entities/interface/pedido/Cliente';
+import { Pedido } from '../../../db/entities/interface/pedido/Pedido';
+import { PedidoItem } from '../../../db/entities/interface/pedido/PedidoItem';
+import { PedidoIngrediente } from '../../../db/entities/interface/pedido/PedidoIngrediente';
+import { Pagamento } from '../../../db/entities/interface/pedido/Pagamento';
 import { io } from '../../../server'; // ajuste o caminho conforme seu projeto
 import { sendMessage } from '../../WhatsappWebBot/services/WhatsappService';
 import { WhatsappContatoRepository } from '../repositories/InterfaceRepository';
