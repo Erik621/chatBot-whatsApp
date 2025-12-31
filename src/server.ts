@@ -15,6 +15,7 @@ import { AppDataSource } from '../db/data-source';
 import { setWhatsappClient } from './modules/WhatsappWebBot/services/WhatsappService';
 import { WhatsappContatoRepository } from './modules/interface/repositories/InterfaceRepository';
 
+console.log('🚀 Processo Node iniciado:', process.pid);
 
 dotenv.config();
 
