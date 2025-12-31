@@ -54,6 +54,8 @@ COPY . .
 RUN npm run build
 
 RUN cp src/modules/scripts/model.nlp dist/modules/scripts/model.nlp
+# Depois de copiar o código
+RUN cp -r src/modules/WhatsappWebBot/public dist/modules/WhatsappWebBot/public
 
 EXPOSE 3000
 
