@@ -40,7 +40,7 @@
     "multer": "^2.0.1",
     "node-nlp": "^5.0.0-alpha.5",
     "pg": "^8.14.1",
-    "puppeteer": "^24.34.0",
+    "puppeteer": "^21.6.0",
     "qrcode": "^1.5.4",
     "reflect-metadata": "^0.2.2",
     "socket.io": "^4.8.1",

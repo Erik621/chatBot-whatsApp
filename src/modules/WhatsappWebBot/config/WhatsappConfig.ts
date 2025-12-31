@@ -47,15 +47,15 @@ let clientInstance: Client | null = null;
 // 🚀 Inicia o cliente WhatsApp com Chrome real e persistência total
 export const startWhatsappClient = async () => {
 
-    if (clientInstance) {
+  if (clientInstance) {
     console.warn('⚠️ WhatsApp Client já iniciado, reutilizando instância');
     return clientInstance;
   }
   console.log('🚀 Iniciando cliente WhatsApp com Chrome nativo...');
 
   // 🔧 Remove locks antes de inicializar o Chrome
-  const profilePath = `${CACHE_PATH}/${SESSION_ID}`;
-  removeChromeLocks(profilePath);
+  /* const profilePath = `${CACHE_PATH}/${SESSION_ID}`;
+  removeChromeLocks(profilePath); */
 
   const client = new Client({
     authStrategy: new LocalAuth({
@@ -73,9 +73,16 @@ export const startWhatsappClient = async () => {
         '--no-first-run',
         '--no-zygote',
         '--disable-extensions',
+        /* '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--no-first-run',
+        '--no-zygote',
+        '--disable-extensions',
         '--disable-background-timer-throttling',
         '--remote-debugging-port=9222',
-        `--user-data-dir=${profilePath}`,
+        `--user-data-dir=${profilePath}`, */
       ],
     },
   });
