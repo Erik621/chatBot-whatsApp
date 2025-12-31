@@ -13,6 +13,7 @@ import { Pedido } from './entities/interface/pedido/Pedido';
 import { PedidoIngrediente } from './entities/interface/pedido/PedidoIngrediente';
 import { PedidoItem } from './entities/interface/pedido/PedidoItem';
 import { WhatsappContato } from './entities/interface/WhatsappContato';
+import path from 'path';
 
 
 
@@ -24,9 +25,18 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME || "admin",
   password: process.env.DB_PASSWORD || "A#1N6k9Z!94oMzoqXvfd",
   database: process.env.DB_DATABASE || "meubanco",
-  synchronize: false, // nunca deixe true em produção
+  synchronize: false,
   logging: false,
-  entities: [Intent,Example,Answer,User,Categoria,Produto,Ingrediente,Cliente,Pagamento,Pedido,PedidoIngrediente,PedidoItem,WhatsappContato], // ajuste para onde estão suas entidades
-  migrations: ['db/migrations/*.ts'],
+  entities: [
+    // Ajusta dependendo do ambiente
+    process.env.NODE_ENV === 'production'
+      ? path.join(__dirname, 'entities/**/*.js') // produção usa JS gerado pelo tsc
+      : path.join(__dirname, 'entities/**/*.ts') // dev usa TS
+  ],
+  migrations: [
+    process.env.NODE_ENV === 'production'
+      ? path.join(__dirname, 'migrations/**/*.js')
+      : path.join(__dirname, 'migrations/**/*.ts')
+  ],
   subscribers: [],
 });

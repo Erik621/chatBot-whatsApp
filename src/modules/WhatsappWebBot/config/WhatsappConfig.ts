@@ -64,6 +64,7 @@ export const startWhatsappClient = async () => {
     }),
     puppeteer: {
       headless: true,
+      userDataDir: '/tmp/whatsapp-profile',
       executablePath: CHROME_PATH,
       args: [
         '--no-sandbox',

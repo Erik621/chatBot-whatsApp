@@ -53,6 +53,8 @@ COPY . .
 # Compila TypeScript → gera /dist
 RUN npm run build
 
+RUN cp src/modules/scripts/model.nlp dist/modules/scripts/model.nlp
+
 EXPOSE 3000
 
 CMD ["node", "dist/server.js"]
