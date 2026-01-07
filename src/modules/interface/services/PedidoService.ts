@@ -49,7 +49,11 @@ export class PedidoService {
   private adicionalRepo = AppDataSource.getRepository(PedidoIngrediente);
   private pagamentoRepo = AppDataSource.getRepository(Pagamento);
 
+
+
   async criarPedido(data: PedidoInput): Promise<Pedido> {
+    const CHAVE_PIX = '967579f7-c4f1-4494-a69c-5d45cfc8fe3f';
+
     // 1. Criar cliente
     const novoCliente = this.clienteRepo.create(data.cliente);
     await this.clienteRepo.save(novoCliente);
@@ -124,9 +128,20 @@ export class PedidoService {
       if (contato) {
         console.log('📨 Enviando mensagem WhatsApp:', contato.whatsappId);
 
-        await sendMessage(contato.whatsappId,
+        // Mensagem padrão (localização)
+        await sendMessage(
+          contato.whatsappId,
           `✅ Pedido nº ${pedido.id} realizado com sucesso!\n\n📍 Para seguirmos com a entrega, por favor envie sua localização atual aqui no WhatsApp.`
         );
+
+        // 👉 NOVO: mensagem específica para PIX
+        if (data.formaPagamento.toUpperCase() === 'Pix') {
+          await sendMessage(
+            contato.whatsappId,
+            `💰 *Pagamento via PIX*\n\nVi que você selecionou a forma de pagamento *PIX*.\n\n🔑 Chave PIX:\n${CHAVE_PIX}\n\n📎 Após realizar o pagamento, envie o *comprovante* por aqui para darmos continuidade ao seu pedido.`
+          );
+        }
+
       } else {
         console.log('⚠️ Cliente ainda não falou com o WhatsApp');
       }
@@ -134,6 +149,7 @@ export class PedidoService {
     } catch (err) {
       console.error('❌ Falha ao enviar WhatsApp:', err);
     }
+
     return pedido;
 
   }
