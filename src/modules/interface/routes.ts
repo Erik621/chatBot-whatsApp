@@ -13,7 +13,7 @@ const pedidoController = new PedidoController();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.resolve(__dirname, '../../../public/imagens');
+    const uploadPath = path.resolve(__dirname, '../../../uploads/imagens');
     // Cria a pasta se não existir
     fs.mkdirSync(uploadPath, { recursive: true });
     cb(null, uploadPath);
