@@ -135,10 +135,14 @@ export class PedidoService {
         );
 
         // 👉 NOVO: mensagem específica para PIX
-        if (data.formaPagamento.toUpperCase() === 'Pix') {
+        if (data.formaPagamento === 'Pix') {
           await sendMessage(
             contato.whatsappId,
-            `💰 *Pagamento via PIX*\n\nVi que você selecionou a forma de pagamento *PIX*.\n\n🔑 Chave PIX:\n${CHAVE_PIX}\n\n📎 Após realizar o pagamento, envie o *comprovante* por aqui para darmos continuidade ao seu pedido.`
+            `💰 *Pagamento via PIX*\n\nVi que você selecionou a forma de pagamento *PIX*.\n\n🔑 Chave PIX:\n${CHAVE_PIX}\nSimone Ribeiro de Queiroz\nNubank\n\n📎 Após realizar o pagamento, envie o *comprovante* por aqui para darmos continuidade ao seu pedido.`
+          );
+          await sendMessage(
+            contato.whatsappId,
+            `${CHAVE_PIX}`
           );
         }
 

@@ -46,8 +46,10 @@ app.use(cors());
 app.use(express.json());
 
 // 📂 Servir arquivos de imagem
-app.use('/api/imagens', express.static(path.resolve(__dirname, '../public/imagens')));
-
+app.use(
+  '/api/imagens',
+  express.static(path.resolve(process.cwd(), 'uploads/imagens'))
+);
 // 🌐 API principal
 app.use('/api', interfaceRoutes);
 
