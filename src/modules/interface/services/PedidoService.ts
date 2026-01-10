@@ -9,6 +9,8 @@ import { io } from '../../../server'; // ajuste o caminho conforme seu projeto
 import { sendMessage } from '../../WhatsappWebBot/services/WhatsappService';
 import { WhatsappContatoRepository } from '../repositories/InterfaceRepository';
 import { gerarPossiveisTelefones } from '../utils/telefone';
+import { HorarioFuncionamentoService } from '../../../shared/services/HorarioFuncionamentoService';
+
 
 function formatarTelefone(telefone: string): string {
   const numero = telefone.replace(/\D/g, '');
@@ -53,6 +55,12 @@ export class PedidoService {
 
   async criarPedido(data: PedidoInput): Promise<Pedido> {
     const CHAVE_PIX = '967579f7-c4f1-4494-a69c-5d45cfc8fe3f';
+
+    if (!HorarioFuncionamentoService.estaAberto()) {
+      throw new Error(
+        'Estabelecimento fechado no momento.'
+      );
+    }
 
     // 1. Criar cliente
     const novoCliente = this.clienteRepo.create(data.cliente);
@@ -125,30 +133,28 @@ export class PedidoService {
     });
 
     try {
-      if (contato) {
-        console.log('📨 Enviando mensagem WhatsApp:', contato.whatsappId);
+      const whatsappDestino =
+        contato?.whatsappId ??
+        formatarTelefone(data.cliente.telefone);
 
-        // Mensagem padrão (localização)
+      console.log('📨 Enviando mensagem WhatsApp para:', whatsappDestino);
+
+      // Mensagem padrão
+      await sendMessage(
+        whatsappDestino,
+        `✅ Pedido nº ${pedido.id} realizado com sucesso!\n\n📍 Para seguirmos com a entrega, por favor envie sua localização atual aqui no WhatsApp.`
+      );
+
+      // PIX
+      if (data.formaPagamento === 'Pix') {
         await sendMessage(
-          contato.whatsappId,
-          `✅ Pedido nº ${pedido.id} realizado com sucesso!\n\n📍 Para seguirmos com a entrega, por favor envie sua localização atual aqui no WhatsApp.`
+          whatsappDestino,
+          `💰 *Pagamento via PIX*\n\nVi que você selecionou a forma de pagamento *PIX*.\n\n🔑 Chave PIX:\n${CHAVE_PIX}\nSimone Ribeiro de Queiroz\nNubank\n\n📎 Após realizar o pagamento, envie o *comprovante* por aqui.`
         );
 
-        // 👉 NOVO: mensagem específica para PIX
-        if (data.formaPagamento === 'Pix') {
-          await sendMessage(
-            contato.whatsappId,
-            `💰 *Pagamento via PIX*\n\nVi que você selecionou a forma de pagamento *PIX*.\n\n🔑 Chave PIX:\n${CHAVE_PIX}\nSimone Ribeiro de Queiroz\nNubank\n\n📎 Após realizar o pagamento, envie o *comprovante* por aqui para darmos continuidade ao seu pedido.`
-          );
-          await sendMessage(
-            contato.whatsappId,
-            `${CHAVE_PIX}`
-          );
-        }
-
-      } else {
-        console.log('⚠️ Cliente ainda não falou com o WhatsApp');
+        await sendMessage(whatsappDestino, CHAVE_PIX);
       }
+
 
     } catch (err) {
       console.error('❌ Falha ao enviar WhatsApp:', err);

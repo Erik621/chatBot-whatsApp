@@ -14,6 +14,8 @@ import { AppDataSource } from './db/data-source';
 
 import { setWhatsappClient } from './modules/WhatsappWebBot/services/WhatsappService';
 import { WhatsappContatoRepository } from './modules/interface/repositories/InterfaceRepository';
+import { HorarioFuncionamentoService } from './shared/services/HorarioFuncionamentoService';
+
 
 console.log('🚀 Processo Node iniciado:', process.pid);
 
@@ -123,6 +125,15 @@ startWhatsappClient()
           await WhatsappContatoRepository.save(novoContato);
           console.log('📇 Novo contato WhatsApp salvo:', whatsappId);
         }
+
+        // 🔒 Verifica horário ANTES de qualquer resposta do bot
+        if (!HorarioFuncionamentoService.estaAberto()) {
+          await message.reply(
+            HorarioFuncionamentoService.mensagemForaHorario()
+          );
+          return;
+        }
+
 
         // 🔹 Continua o fluxo normal do bot (NLP etc)
         await handleMessage(client, message);

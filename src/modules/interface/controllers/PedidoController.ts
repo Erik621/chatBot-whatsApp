@@ -9,9 +9,22 @@ export class PedidoController {
     try {
       const novoPedido = await pedidoService.criarPedido(req.body);
       return res.status(201).json(novoPedido);
-    } catch (error: any) {
-      console.error("Erro ao criar pedido:", error.message);
-      return res.status(500).json({ error: 'Erro ao criar pedido' });
+    } catch (err: any) {
+
+      if (
+        err?.message &&
+        err.message.toLowerCase().includes('fechado')
+      ) {
+        return res.status(403).json({
+          message: err.message,
+        });
+      }
+
+      console.error('Erro ao criar pedido:', err);
+
+      return res.status(500).json({
+        message: 'Erro ao criar pedido',
+      });
     }
   }
 
@@ -59,5 +72,5 @@ export class PedidoController {
     }
   }
 
-  
+
 }
