@@ -12,17 +12,20 @@ import { gerarPossiveisTelefones } from '../utils/telefone';
 import { HorarioFuncionamentoService } from '../../../shared/services/HorarioFuncionamentoService';
 
 
-function formatarTelefone(telefone: string): string {
+function formatarTelefone(telefone: string): string | null {
   const numero = telefone.replace(/\D/g, '');
 
-  // Garante código do Brasil
-  if (!numero.startsWith('55')) {
-    return `55${numero}@c.us`;
+  // Precisa ter DDD
+  if (numero.length < 10) {
+    return null;
   }
 
-  return `${numero}@c.us`;
-}
+  const numeroComPais = numero.startsWith('55')
+    ? numero
+    : `55${numero}`;
 
+  return `${numeroComPais}@c.us`;
+}
 interface PedidoInput {
   cliente: {
     nome: string;
@@ -124,8 +127,7 @@ export class PedidoService {
 
 
     const telefonesPossiveis = gerarPossiveisTelefones(
-      data.cliente.telefone,
-      '77'
+      data.cliente.telefone
     );
 
     const contato = await WhatsappContatoRepository.findOne({
@@ -136,6 +138,11 @@ export class PedidoService {
       const whatsappDestino =
         contato?.whatsappId ??
         formatarTelefone(data.cliente.telefone);
+
+      if (!whatsappDestino) {
+        console.warn('⚠️ Telefone inválido para WhatsApp:', data.cliente.telefone);
+        return pedido;
+      }
 
       console.log('📨 Enviando mensagem WhatsApp para:', whatsappDestino);
 
