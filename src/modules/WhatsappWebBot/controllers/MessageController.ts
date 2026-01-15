@@ -57,7 +57,7 @@ export const handleMessage = async (client: Client, message: Message) => {
         const formattedResponse = resposta.trim();
         await chat.sendMessage(formattedResponse);
       } catch (err) {
-        console.error('❌ Erro ao enviar a mensagem (chat.sendMessage):', err);
+        console.error('❌ Errro ao enviar a mensagem (chat.sendMessage):', err);
       }
     }
   } catch (err) {

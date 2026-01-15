@@ -94,7 +94,11 @@ server.listen(PORT, '0.0.0.0', () => {
 startWhatsappClient()
   .then((client) => {
 
+     client.once('ready', () => {
+    console.log('🔐 WhatsApp pronto para envio');
+
     setWhatsappClient(client);
+
 
     client.on('message', async (message) => {
       try {
@@ -143,6 +147,7 @@ startWhatsappClient()
 
     }
     );
+    });
   })
   .catch((error) => {
     console.error('❌ Erro ao iniciar o WhatsApp Web Client:', error);

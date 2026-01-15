@@ -87,8 +87,9 @@ export const startWhatsappClient = async () => {
     await qrcode.toFile(qrImagePath, qr);
   });
 
-  client.on('ready', () => {
+  client.on('ready', async () => {
     console.log('✅ Cliente WhatsApp conectado e pronto!');
+    await client.getChats();
   });
 
   client.on('auth_failure', (msg) => {

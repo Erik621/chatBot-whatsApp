@@ -12,5 +12,16 @@ export const sendMessage = async (to: string, message: string) => {
   }
 
   const chatId = to.includes('@c.us') ? to : `${to}@c.us`;
-  await whatsappClient.sendMessage(chatId, message);
+   try {
+    const chat = await whatsappClient.getChatById(chatId);
+
+    if (!chat) {
+      console.warn('⚠️ Chat não encontrado:', chatId);
+      return;
+    }
+
+    await chat.sendMessage(message);
+  } catch (err) {
+    console.error('❌ Erro ao enviar mensagem WhatsAppService:', err);
+  }
 };
