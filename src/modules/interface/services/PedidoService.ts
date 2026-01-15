@@ -135,14 +135,14 @@ export class PedidoService {
     });
 
     try {
-      const whatsappDestino =
-        contato?.whatsappId ??
-        formatarTelefone(data.cliente.telefone);
-
-      if (!whatsappDestino) {
-        console.warn('⚠️ Telefone inválido para WhatsApp:', data.cliente.telefone);
+      if (!contato?.whatsappId) {
+        console.warn(
+          '⚠️ Cliente ainda não interagiu com o WhatsApp. Mensagem não enviada.'
+        );
         return pedido;
       }
+
+  const whatsappDestino = contato.whatsappId;
 
       console.log('📨 Enviando mensagem WhatsApp para:', whatsappDestino);
 
