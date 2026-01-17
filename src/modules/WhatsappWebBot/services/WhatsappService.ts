@@ -20,7 +20,7 @@ export const sendMessage = async (to: string, message: string) => {
       return;
     }
 
-    await chat.sendMessage(message);
+    await chat.sendMessage(message, { sendSeen: false });
   } catch (err) {
     console.error('❌ Erro ao enviar mensagem WhatsAppService:', err);
   }

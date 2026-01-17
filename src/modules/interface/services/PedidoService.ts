@@ -1,4 +1,4 @@
-// src/modules/users/services/PedidoService.ts
+// src/modules/interface/services/PedidoService.ts
 import { AppDataSource } from '../../../db/data-source';
 import { Cliente } from '../../../db/entities/interface/pedido/Cliente';
 import { Pedido } from '../../../db/entities/interface/pedido/Pedido';
@@ -10,22 +10,14 @@ import { sendMessage } from '../../WhatsappWebBot/services/WhatsappService';
 import { WhatsappContatoRepository } from '../repositories/InterfaceRepository';
 import { gerarPossiveisTelefones } from '../utils/telefone';
 import { HorarioFuncionamentoService } from '../../../shared/services/HorarioFuncionamentoService';
+import { Like } from 'typeorm';
 
 
-function formatarTelefone(telefone: string): string | null {
-  const numero = telefone.replace(/\D/g, '');
-
-  // Precisa ter DDD
-  if (numero.length < 10) {
-    return null;
-  }
-
-  const numeroComPais = numero.startsWith('55')
-    ? numero
-    : `55${numero}`;
-
-  return `${numeroComPais}@c.us`;
+function ultimos7Digitos(telefone: string): string {
+  return telefone.replace(/\D/g, '').slice(-7);
 }
+
+
 interface PedidoInput {
   cliente: {
     nome: string;
@@ -129,9 +121,16 @@ export class PedidoService {
     const telefonesPossiveis = gerarPossiveisTelefones(
       data.cliente.telefone
     );
+    console.log(telefonesPossiveis);
+    const ultimos7 = ultimos7Digitos(data.cliente.telefone);
 
     const contato = await WhatsappContatoRepository.findOne({
-      where: telefonesPossiveis.map(tel => ({ telefone: tel }))
+      where: {
+        telefone: Like(`%${ultimos7}`)
+      },
+      order: {
+        ultimaInteracao: 'DESC'
+      }
     });
 
     try {
@@ -142,7 +141,7 @@ export class PedidoService {
         return pedido;
       }
 
-  const whatsappDestino = contato.whatsappId;
+      const whatsappDestino = contato.whatsappId;
 
       console.log('📨 Enviando mensagem WhatsApp para:', whatsappDestino);
 

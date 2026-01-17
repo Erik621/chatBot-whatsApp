@@ -1,3 +1,4 @@
+// src/modules/interface/utils/telefone.ts
 export function gerarPossiveisTelefones(
   telefoneInput: string
 ): string[] {
