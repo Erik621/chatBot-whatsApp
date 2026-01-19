@@ -102,10 +102,19 @@ startWhatsappClient()
     client.on('message', async (message) => {
       try {
         // Ignorar status e grupos
+        let idProcess = message.from;
         if (message.from === 'status@broadcast') return;
-        if (!message.from.endsWith('@c.us')) return;
 
-        const whatsappId = message.from;
+        if (idProcess.endsWith('@lid')) {
+        const contact = await client.getContactById(idProcess);
+        idProcess = contact.id._serialized; // Isso geralmente retorna o número@c.us
+    }
+
+    // Agora você tem o ID correto para comparar ou salvar no seu banco
+    console.log("ID processado:", idProcess);
+        //if (!message.from.endsWith('@c.us')) return;
+
+        const whatsappId = idProcess;
 
         const telefone = whatsappId
           .replace('@c.us', '')
@@ -114,7 +123,7 @@ startWhatsappClient()
         const contatoExistente = await WhatsappContatoRepository.findOne({
           where: { whatsappId }
         });
-
+        console.log(contatoExistente);
         if (contatoExistente) {
           contatoExistente.ultimaInteracao = new Date();
           await WhatsappContatoRepository.save(contatoExistente);
@@ -132,8 +141,7 @@ startWhatsappClient()
         // 🔒 Verifica horário ANTES de qualquer resposta do bot
         if (!HorarioFuncionamentoService.estaAberto()) {
           await message.reply(
-            HorarioFuncionamentoService.mensagemForaHorario()
-          );
+            HorarioFuncionamentoService.mensagemForaHorario(),undefined, { sendSeen: false });
           return;
         }
 
