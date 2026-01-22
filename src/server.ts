@@ -106,12 +106,14 @@ startWhatsappClient()
         if (message.from === 'status@broadcast') return;
 
         if (idProcess.endsWith('@lid')) {
-        const contact = await client.getContactById(idProcess);
-        idProcess = contact.id._serialized; // Isso geralmente retorna o número@c.us
-    }
+          const contact = await client.getContactById(idProcess);
+          idProcess = contact.id._serialized; // Isso geralmente retorna o número@c.us
+        }
+        const chat = await message.getChat().catch(() => null);
+        if (chat?.isGroup) return;
 
-    // Agora você tem o ID correto para comparar ou salvar no seu banco
-    console.log("ID processado:", idProcess);
+        // Agora você tem o ID correto para comparar ou salvar no seu banco
+        console.log("ID processado:", idProcess);
         //if (!message.from.endsWith('@c.us')) return;
 
         const whatsappId = idProcess;
@@ -141,7 +143,7 @@ startWhatsappClient()
         // 🔒 Verifica horário ANTES de qualquer resposta do bot
         if (!HorarioFuncionamentoService.estaAberto()) {
           await message.reply(
-            HorarioFuncionamentoService.mensagemForaHorario(),undefined, { sendSeen: false });
+            HorarioFuncionamentoService.mensagemForaHorario(), undefined, { sendSeen: false });
           return;
         }
 
@@ -154,7 +156,7 @@ startWhatsappClient()
 
     }
     );
-    
+
   })
   .catch((error) => {
     console.error('❌ Erro ao iniciar o WhatsApp Web Client:', error);
